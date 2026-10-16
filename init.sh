@@ -58,11 +58,13 @@ replace_text_files() {
         "$file"
     fi
   done < <(
-    find "$root" -type f -print0 \
+    # 排除条件必须写在 -print0 前面，否则不生效（子仓的 .git 指针文件会被改坏）
+    find "$root" -type f \
       ! -path '*/.git' \
       ! -path '*/.git/*' \
       ! -name '*.lock' \
-      ! -name 'pnpm-lock.yaml'
+      ! -name 'pnpm-lock.yaml' \
+      -print0
   )
 }
 
@@ -84,21 +86,18 @@ for component in "${ACTIVE_COMPONENTS[@]}"; do
   rename_tpl_paths "tpl-${component}"
 done
 
-cat > .gitmodules <<EOF
-[submodule "${APP_NAME}-backend"]
-\tpath = ${APP_NAME}-backend
-\turl = https://github.com/${GITHUB_ORG}/${APP_NAME}-backend.git
-[submodule "${APP_NAME}-admin-frontend"]
-\tpath = ${APP_NAME}-admin-frontend
-\turl = https://github.com/${GITHUB_ORG}/${APP_NAME}-admin-frontend.git
-[submodule "${APP_NAME}-web-frontend"]
-\tpath = ${APP_NAME}-web-frontend
-\turl = https://github.com/${GITHUB_ORG}/${APP_NAME}-web-frontend.git
-EOF
-
+# 先 git mv（它会同步改 .gitmodules 里的 path），再整份重写 .gitmodules；
+# 反过来做 git 会因 .gitmodules 有未暂存改动拒绝移动。用 printf 写真正的制表符。
 for component in "${ACTIVE_COMPONENTS[@]}"; do
   git mv "tpl-${component}" "${APP_NAME}-${component}"
 done
+
+: > .gitmodules
+for component in backend admin-frontend web-frontend; do
+  printf '[submodule "%s-%s"]\n\tpath = %s-%s\n\turl = https://github.com/%s/%s-%s.git\n' \
+    "$APP_NAME" "$component" "$APP_NAME" "$component" "$GITHUB_ORG" "$APP_NAME" "$component" >> .gitmodules
+done
+git config -f .gitmodules --list >/dev/null
 
 # 锁文件不做通用文本扫描，只修正当前 workspace package identity。
 uv_lock="${APP_NAME}-backend/app/uv.lock"
