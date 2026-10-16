@@ -100,7 +100,7 @@ git submodule sync --recursive
 git submodule update --init --recursive
 ```
 
-当前架构与发布入口见 `k8s` 仓库的 `sunmoonai/docs/project-guide/`；
+当前架构与发布入口见 `k8s` 仓库的 `docs/project-guide/`；
 开发约束见 `sunmoonai/docs/dev-agent-task/SDD/constraints.md`。
 本批修复的部署与回滚前置见 `sunmoonai/docs/legacy-backlog/deployment-checklist.md`，
 旧重构计划通过同目录的 `verification-index.md` 查询，不再作为当前施工指令。
