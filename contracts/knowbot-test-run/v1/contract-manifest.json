@@ -1,0 +1,8 @@
+{
+  "contract": "knowbot-test-run",
+  "major_version": 1,
+  "schemas": {
+    "test-run-request.schema.json": "c56be083fd737b67c82a5f3c805f02c3119080840bb6fd7e834f2fdd36572f2d",
+    "test-run-result.schema.json": "e788e21f047fcdb97443cdae5561f475368230aa4ccaf5e7d4727e3c5dec7178"
+  }
+}

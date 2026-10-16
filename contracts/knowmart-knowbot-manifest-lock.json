@@ -1,0 +1,7 @@
+{
+  "provider": "knowmart-app",
+  "contract": "knowbot-manifest",
+  "major_version": 1,
+  "schema": "contracts/knowbot/v1/knowbot-manifest.schema.json",
+  "sha256": "981a4f84467445cbb5da1c7c4acfd1a196af07a3dd2b195685a0ac320e944bbe"
+}

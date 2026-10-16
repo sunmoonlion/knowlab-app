@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-test-run/v1/test-run-request.schema.json",
+  "$defs": {
+    "Budget": {
+      "additionalProperties": false,
+      "properties": {
+        "limit": {
+          "pattern": "^[0-9]{1,6}(\\.[0-9]{1,2})?$",
+          "title": "Limit",
+          "type": "string"
+        },
+        "currency": {
+          "const": "CNY",
+          "default": "CNY",
+          "title": "Currency",
+          "type": "string"
+        }
+      },
+      "required": [
+        "limit"
+      ],
+      "title": "Budget",
+      "type": "object"
+    },
+    "CaseInput": {
+      "additionalProperties": false,
+      "properties": {
+        "question": {
+          "maxLength": 4000,
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "answers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "maxProperties": 64,
+          "title": "Answers",
+          "type": "object"
+        }
+      },
+      "required": [
+        "question"
+      ],
+      "title": "CaseInput",
+      "type": "object"
+    },
+    "Expectation": {
+      "additionalProperties": false,
+      "description": "用户定的「怎样算对」：在最后的交回物里，某一项应当等于、约等于或包含什么。",
+      "properties": {
+        "artifact": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Artifact",
+          "type": "string"
+        },
+        "path": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "equals",
+            "approx",
+            "contains"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            }
+          ],
+          "title": "Value"
+        },
+        "tolerance": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tolerance"
+        }
+      },
+      "required": [
+        "artifact",
+        "path",
+        "kind",
+        "value"
+      ],
+      "title": "Expectation",
+      "type": "object"
+    },
+    "RunCase": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "pattern": "^[A-Za-z0-9._-]{1,64}$",
+          "title": "Case Id",
+          "type": "string"
+        },
+        "input": {
+          "$ref": "#/$defs/CaseInput"
+        },
+        "expectations": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Expectation"
+          },
+          "maxItems": 64,
+          "title": "Expectations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "case_id",
+        "input"
+      ],
+      "title": "RunCase",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "knowbot-test-run/v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[A-Za-z0-9._:-]{8,128}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "owner_subject": {
+      "pattern": "^[A-Za-z0-9._:@-]{1,512}$",
+      "title": "Owner Subject",
+      "type": "string"
+    },
+    "manifest": {
+      "additionalProperties": true,
+      "title": "Manifest",
+      "type": "object"
+    },
+    "cases": {
+      "items": {
+        "$ref": "#/$defs/RunCase"
+      },
+      "maxItems": 50,
+      "minItems": 1,
+      "title": "Cases",
+      "type": "array"
+    },
+    "budget": {
+      "$ref": "#/$defs/Budget"
+    },
+    "timeout_seconds": {
+      "maximum": 86400,
+      "minimum": 60,
+      "title": "Timeout Seconds",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "contract",
+    "run_id",
+    "owner_subject",
+    "manifest",
+    "cases",
+    "budget",
+    "timeout_seconds"
+  ],
+  "title": "knowbot-test-run v1 request",
+  "type": "object"
+}

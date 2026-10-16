@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-test-run/v1/test-run-result.schema.json",
+  "$defs": {
+    "CaseResult": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "pattern": "^[A-Za-z0-9._-]{1,64}$",
+          "title": "Case Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "needs_human",
+            "error"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "steps": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/StepResult"
+          },
+          "maxItems": 200,
+          "title": "Steps",
+          "type": "array"
+        },
+        "expectations": {
+          "default": [],
+          "items": {
+            "type": "boolean"
+          },
+          "maxItems": 64,
+          "title": "Expectations",
+          "type": "array"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "case_id",
+        "status"
+      ],
+      "title": "CaseResult",
+      "type": "object"
+    },
+    "Cost": {
+      "additionalProperties": false,
+      "properties": {
+        "spent": {
+          "pattern": "^[0-9]{1,9}(\\.[0-9]{1,6})?$",
+          "title": "Spent",
+          "type": "string"
+        },
+        "currency": {
+          "const": "CNY",
+          "default": "CNY",
+          "title": "Currency",
+          "type": "string"
+        }
+      },
+      "required": [
+        "spent"
+      ],
+      "title": "Cost",
+      "type": "object"
+    },
+    "StepResult": {
+      "additionalProperties": false,
+      "properties": {
+        "step_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Step Id",
+          "type": "string"
+        },
+        "accepted": {
+          "title": "Accepted",
+          "type": "boolean"
+        },
+        "failed_checks": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Failed Checks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "step_id",
+        "accepted"
+      ],
+      "title": "StepResult",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "knowbot-test-run/v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[A-Za-z0-9._:-]{8,128}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "accepted",
+        "running",
+        "passed",
+        "failed",
+        "error",
+        "timeout",
+        "cancelled"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "cases": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/CaseResult"
+      },
+      "maxItems": 50,
+      "title": "Cases",
+      "type": "array"
+    },
+    "cost": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Cost"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "started_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Started At"
+    },
+    "finished_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Finished At"
+    }
+  },
+  "required": [
+    "contract",
+    "run_id",
+    "status"
+  ],
+  "title": "knowbot-test-run v1 result",
+  "type": "object"
+}
