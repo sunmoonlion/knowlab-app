@@ -181,6 +181,13 @@
       "minimum": 60,
       "title": "Timeout Seconds",
       "type": "integer"
+    },
+    "max_wait_seconds": {
+      "default": 259200,
+      "maximum": 604800,
+      "minimum": 60,
+      "title": "Max Wait Seconds",
+      "type": "integer"
     }
   },
   "required": [

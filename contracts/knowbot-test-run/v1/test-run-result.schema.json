@@ -80,6 +80,115 @@
       "title": "Cost",
       "type": "object"
     },
+    "Option": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label"
+      ],
+      "title": "Option",
+      "type": "object"
+    },
+    "PendingQuestion": {
+      "additionalProperties": false,
+      "description": "跑到要人决定的地方。tool_approval：能不能做这件事（运营答）；question：Codex\n反问；ask_before：开步前的提问（key 是清单里提问的 id，答案可记回用例）。",
+      "properties": {
+        "question_id": {
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "title": "Question Id",
+          "type": "string"
+        },
+        "case_id": {
+          "pattern": "^[A-Za-z0-9._-]{1,64}$",
+          "title": "Case Id",
+          "type": "string"
+        },
+        "step_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Step Id"
+        },
+        "kind": {
+          "enum": [
+            "tool_approval",
+            "question",
+            "ask_before"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "key": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Key"
+        },
+        "text": {
+          "maxLength": 4000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "options": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Option"
+          },
+          "maxItems": 20,
+          "title": "Options",
+          "type": "array"
+        },
+        "allow_free_text": {
+          "default": true,
+          "title": "Allow Free Text",
+          "type": "boolean"
+        },
+        "asked_at": {
+          "maxLength": 40,
+          "minLength": 1,
+          "title": "Asked At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question_id",
+        "case_id",
+        "kind",
+        "text",
+        "asked_at"
+      ],
+      "title": "PendingQuestion",
+      "type": "object"
+    },
     "StepResult": {
       "additionalProperties": false,
       "properties": {
@@ -127,6 +236,7 @@
       "enum": [
         "accepted",
         "running",
+        "waiting",
         "passed",
         "failed",
         "error",
@@ -179,6 +289,21 @@
       ],
       "default": null,
       "title": "Finished At"
+    },
+    "questions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/PendingQuestion"
+      },
+      "maxItems": 50,
+      "title": "Questions",
+      "type": "array"
+    },
+    "waited_seconds": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Waited Seconds",
+      "type": "integer"
     }
   },
   "required": [

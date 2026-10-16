@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-test-run/v1/test-run-answers.schema.json",
+  "$defs": {
+    "Answer": {
+      "additionalProperties": false,
+      "description": "回答一个问题：tool_approval 给 decision；别的给选项或自己写的话。",
+      "properties": {
+        "question_id": {
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "title": "Question Id",
+          "type": "string"
+        },
+        "decision": {
+          "anyOf": [
+            {
+              "enum": [
+                "approve",
+                "deny"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decision"
+        },
+        "option_id": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Option Id"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "maxLength": 4000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "answered_by": {
+          "enum": [
+            "operator",
+            "user"
+          ],
+          "title": "Answered By",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question_id",
+        "answered_by"
+      ],
+      "title": "Answer",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "knowbot-test-run/v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "answers": {
+      "items": {
+        "$ref": "#/$defs/Answer"
+      },
+      "maxItems": 50,
+      "minItems": 1,
+      "title": "Answers",
+      "type": "array"
+    }
+  },
+  "required": [
+    "contract",
+    "answers"
+  ],
+  "title": "knowbot-test-run v1 answers",
+  "type": "object"
+}
