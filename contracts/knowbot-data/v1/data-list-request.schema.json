@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-data/v1/data-list-request.schema.json",
+  "$defs": {
+    "KnowbotPurpose": {
+      "additionalProperties": false,
+      "description": "用户请来的分身：运行方从已认证的会话与钉住的清单取这几项。",
+      "properties": {
+        "kind": {
+          "const": "knowbot",
+          "title": "Kind",
+          "type": "string"
+        },
+        "owner_subject": {
+          "pattern": "^[A-Za-z0-9._:@-]{1,512}$",
+          "title": "Owner Subject",
+          "type": "string"
+        },
+        "knowbot_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+          "title": "Knowbot Id",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^[1-9][0-9]{0,5}$",
+          "title": "Version",
+          "type": "string"
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "owner_subject",
+        "knowbot_id",
+        "version",
+        "digest"
+      ],
+      "title": "KnowbotPurpose",
+      "type": "object"
+    },
+    "RunPurpose": {
+      "additionalProperties": false,
+      "description": "knowlab 发起的测试：数据的所有者由 knowlab 按草稿认，运行方不用给。",
+      "properties": {
+        "kind": {
+          "const": "test",
+          "title": "Kind",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[A-Za-z0-9._:-]{8,128}$",
+          "title": "Run Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "run_id"
+      ],
+      "title": "RunPurpose",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "knowbot-data/v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "purpose": {
+      "discriminator": {
+        "mapping": {
+          "knowbot": "#/$defs/KnowbotPurpose",
+          "test": "#/$defs/RunPurpose"
+        },
+        "propertyName": "kind"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/KnowbotPurpose"
+        },
+        {
+          "$ref": "#/$defs/RunPurpose"
+        }
+      ],
+      "title": "Purpose"
+    }
+  },
+  "required": [
+    "contract",
+    "purpose"
+  ],
+  "title": "knowbot-data v1 list request",
+  "type": "object"
+}

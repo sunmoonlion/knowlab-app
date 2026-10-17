@@ -1,0 +1,10 @@
+{
+  "contract": "knowbot-data",
+  "major_version": 1,
+  "schemas": {
+    "data-list-request.schema.json": "515f456ee4c9f3d3e9f2d65dc9861a4040e9a1ae969e0bd86f8bac107d95942b",
+    "data-list-result.schema.json": "77391f6d9f00e3186c8449f7f1e216cd1cf63d8c6e996b5e09ccdf20e4e86bd9",
+    "data-read-request.schema.json": "d2cd59be6fbbbd97b5214ea79a79066c2245ebac06599411fe63afb5ac1b6274",
+    "data-read-result.schema.json": "26f8c618b83ad90c3729a3e15f8eb5eadc0969103ae9f361c0b802dcbff104a6"
+  }
+}

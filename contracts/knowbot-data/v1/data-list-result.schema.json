@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-data/v1/data-list-result.schema.json",
+  "$defs": {
+    "DatasetEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "dataset_id": {
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "content_type": {
+          "title": "Content Type",
+          "type": "string"
+        },
+        "size_bytes": {
+          "title": "Size Bytes",
+          "type": "integer"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dataset_id",
+        "name",
+        "content_type",
+        "size_bytes",
+        "version",
+        "sha256"
+      ],
+      "title": "DatasetEntry",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "knowbot-data/v1",
+      "default": "knowbot-data/v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "datasets": {
+      "items": {
+        "$ref": "#/$defs/DatasetEntry"
+      },
+      "title": "Datasets",
+      "type": "array"
+    }
+  },
+  "required": [
+    "datasets"
+  ],
+  "title": "knowbot-data v1 list result",
+  "type": "object"
+}
