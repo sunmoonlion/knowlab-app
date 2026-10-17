@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-data/v1/data-cells-result.schema.json",
+  "$defs": {
+    "CellValue": {
+      "additionalProperties": false,
+      "description": "按请求的次序一一对应。\n\n没有这一行或这一列：found 为 false；有但读不成数：number 为空。",
+      "properties": {
+        "dataset_id": {
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "sheet": {
+          "title": "Sheet",
+          "type": "string"
+        },
+        "row": {
+          "title": "Row",
+          "type": "string"
+        },
+        "column": {
+          "title": "Column",
+          "type": "string"
+        },
+        "found": {
+          "title": "Found",
+          "type": "boolean"
+        },
+        "raw": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw"
+        },
+        "number": {
+          "anyOf": [
+            {
+              "pattern": "^-?[0-9]+(\\.[0-9]+)?$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Number"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dataset_id",
+        "sheet",
+        "row",
+        "column",
+        "found",
+        "version",
+        "sha256"
+      ],
+      "title": "CellValue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "knowbot-data/v1",
+      "default": "knowbot-data/v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "cells": {
+      "items": {
+        "$ref": "#/$defs/CellValue"
+      },
+      "title": "Cells",
+      "type": "array"
+    }
+  },
+  "required": [
+    "cells"
+  ],
+  "title": "knowbot-data v1 cells result",
+  "type": "object"
+}

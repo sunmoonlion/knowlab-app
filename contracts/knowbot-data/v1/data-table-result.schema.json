@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-data/v1/data-table-result.schema.json",
+  "$defs": {
+    "Citation": {
+      "additionalProperties": false,
+      "description": "引用这份数据时写上：哪份、哪一版、内容摘要、第几页。",
+      "properties": {
+        "dataset_id": {
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "page": {
+          "title": "Page",
+          "type": "integer"
+        },
+        "pages": {
+          "title": "Pages",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "dataset_id",
+        "version",
+        "sha256",
+        "page",
+        "pages"
+      ],
+      "title": "Citation",
+      "type": "object"
+    },
+    "TableRow": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "values": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Values",
+          "type": "object"
+        }
+      },
+      "required": [
+        "label",
+        "values"
+      ],
+      "title": "TableRow",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "knowbot-data/v1",
+      "default": "knowbot-data/v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "dataset_id": {
+      "title": "Dataset Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "content_type": {
+      "title": "Content Type",
+      "type": "string"
+    },
+    "sheets": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Sheets",
+      "type": "array"
+    },
+    "sheet": {
+      "title": "Sheet",
+      "type": "string"
+    },
+    "columns": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Columns",
+      "type": "array"
+    },
+    "page": {
+      "minimum": 1,
+      "title": "Page",
+      "type": "integer"
+    },
+    "pages": {
+      "minimum": 1,
+      "title": "Pages",
+      "type": "integer"
+    },
+    "rows": {
+      "items": {
+        "$ref": "#/$defs/TableRow"
+      },
+      "title": "Rows",
+      "type": "array"
+    },
+    "note": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Note"
+    },
+    "citation": {
+      "$ref": "#/$defs/Citation"
+    }
+  },
+  "required": [
+    "dataset_id",
+    "name",
+    "content_type",
+    "sheets",
+    "sheet",
+    "columns",
+    "page",
+    "pages",
+    "rows",
+    "citation"
+  ],
+  "title": "knowbot-data v1 table result",
+  "type": "object"
+}
