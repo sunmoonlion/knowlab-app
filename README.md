@@ -1,6 +1,6 @@
 # knowlab-app
 
-**knowlab**（知识实验室）：用户提供想法（最好是 skill）与自己的数据，我们在这里把它工程化、测试好，交付成用户自己的**分身**（knowbot）。投资逻辑与数据都来自用户，我们只做工程化与测试；分身只归用户自己，交付后存进 knowmart，用户在 investment 工作台里「请」来用。
+**knowlab**（知识实验室）：用户提供想法（最好是 skill）与自己的数据，我们在这里把它工程化、测试好，交付成用户自己的**分身**（knowbot）。投资逻辑与数据都来自用户，我们只做工程化与测试；分身只归用户自己，交付后存进 knowmart，用户在 knowbench 工作台里「请」来用。
 
 由 [tpl-app](https://github.com/sunmoonlion/tpl-app) 实例化（tpl-app 4b19daf，2026-10-16）：
 
