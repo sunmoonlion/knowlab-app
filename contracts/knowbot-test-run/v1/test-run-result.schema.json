@@ -210,6 +210,16 @@
           "maxItems": 64,
           "title": "Failed Checks",
           "type": "array"
+        },
+        "details": {
+          "default": [],
+          "items": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Details",
+          "type": "array"
         }
       },
       "required": [
