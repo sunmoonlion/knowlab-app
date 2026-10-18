@@ -189,6 +189,69 @@
       "title": "PendingQuestion",
       "type": "object"
     },
+    "Progress": {
+      "additionalProperties": false,
+      "description": "跑着的那条用例走到哪了（待办账 135）。\n\n只有编号、计数、步名和钱，不含交回物内容（C-L5）。\nv1 冻结后加的可选字段：运行方不给也收。",
+      "properties": {
+        "case_id": {
+          "pattern": "^[A-Za-z0-9._-]{1,64}$",
+          "title": "Case Id",
+          "type": "string"
+        },
+        "cases_done": {
+          "maximum": 50,
+          "minimum": 0,
+          "title": "Cases Done",
+          "type": "integer"
+        },
+        "cases_total": {
+          "maximum": 50,
+          "minimum": 1,
+          "title": "Cases Total",
+          "type": "integer"
+        },
+        "step": {
+          "maximum": 200,
+          "minimum": 0,
+          "title": "Step",
+          "type": "integer"
+        },
+        "steps_total": {
+          "maximum": 200,
+          "minimum": 0,
+          "title": "Steps Total",
+          "type": "integer"
+        },
+        "step_title": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Step Title",
+          "type": "string"
+        },
+        "attempt": {
+          "default": 0,
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Attempt",
+          "type": "integer"
+        },
+        "spent": {
+          "pattern": "^[0-9]{1,9}(\\.[0-9]{1,6})?$",
+          "title": "Spent",
+          "type": "string"
+        }
+      },
+      "required": [
+        "case_id",
+        "cases_done",
+        "cases_total",
+        "step",
+        "steps_total",
+        "spent"
+      ],
+      "title": "Progress",
+      "type": "object"
+    },
     "StepResult": {
       "additionalProperties": false,
       "properties": {
@@ -314,6 +377,17 @@
       "minimum": 0,
       "title": "Waited Seconds",
       "type": "integer"
+    },
+    "progress": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Progress"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     }
   },
   "required": [
