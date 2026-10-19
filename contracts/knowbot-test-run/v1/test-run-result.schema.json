@@ -239,6 +239,19 @@
           "pattern": "^[0-9]{1,9}(\\.[0-9]{1,6})?$",
           "title": "Spent",
           "type": "string"
+        },
+        "queued_behind": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f-]{36}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Queued Behind"
         }
       },
       "required": [

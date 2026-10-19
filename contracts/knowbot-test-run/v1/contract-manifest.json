@@ -4,6 +4,6 @@
   "schemas": {
     "test-run-answers.schema.json": "42bd9120de65eab2cb3f98203f666a82f8328e1f4a5e150ffa658cc1c5a29efd",
     "test-run-request.schema.json": "581d2bd48a942735a19ba8d5b81aae174558db75ba434a5a4ebecc507c5af116",
-    "test-run-result.schema.json": "d9a8abbe58ecaaa92c8b8f3c0b43bd6b0d9875062591ebe01a514a727841d74e"
+    "test-run-result.schema.json": "64408a2c6f730732635cdb1e538602f16b12d51616f4df9e074ef6c3dad55c2c"
   }
 }
