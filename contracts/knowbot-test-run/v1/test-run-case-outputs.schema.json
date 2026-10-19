@@ -21,6 +21,19 @@
           "default": false,
           "title": "Truncated",
           "type": "boolean"
+        },
+        "step_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Step Id"
         }
       },
       "required": [
