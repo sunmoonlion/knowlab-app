@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-data/v1/data-quotes-result.schema.json",
+  "$defs": {
+    "QuoteFound": {
+      "additionalProperties": false,
+      "description": "按请求的次序一一对应。找到：found 为 true；没找到：reason 说为什么。",
+      "properties": {
+        "dataset_id": {
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "page": {
+          "title": "Page",
+          "type": "integer"
+        },
+        "found": {
+          "title": "Found",
+          "type": "boolean"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "not_found",
+                "no_pages",
+                "page_out_of_range",
+                "too_short",
+                "too_long"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dataset_id",
+        "page",
+        "found",
+        "version",
+        "sha256"
+      ],
+      "title": "QuoteFound",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "knowbot-data/v1",
+      "default": "knowbot-data/v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "quotes": {
+      "items": {
+        "$ref": "#/$defs/QuoteFound"
+      },
+      "title": "Quotes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "quotes"
+  ],
+  "title": "knowbot-data v1 quotes result",
+  "type": "object"
+}
