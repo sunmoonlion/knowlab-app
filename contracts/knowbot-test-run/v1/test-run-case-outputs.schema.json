@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-test-run/v1/test-run-case-outputs.schema.json",
+  "$defs": {
+    "Deliverable": {
+      "additionalProperties": false,
+      "description": "这条用例写稿那一步这次真写了的文件（项目内相对路径）与它的文字。",
+      "properties": {
+        "path": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 200000,
+          "title": "Text",
+          "type": "string"
+        },
+        "truncated": {
+          "default": false,
+          "title": "Truncated",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "path",
+        "text"
+      ],
+      "title": "Deliverable",
+      "type": "object"
+    },
+    "OutputCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "maxLength": 200,
+          "title": "Label",
+          "type": "string"
+        },
+        "passed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Passed"
+        },
+        "message": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label"
+      ],
+      "title": "OutputCheck",
+      "type": "object"
+    },
+    "StepOutput": {
+      "additionalProperties": false,
+      "description": "一步的最后一次尝试。\n\naccepted 带交回物；rejected 带最后一次交回的内容与原文；没开始的 not_reached。\noutcome 的其余几种（failed、over_budget、cancelled、running）同工作台的\n尝试结局。",
+      "properties": {
+        "step_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Step Id",
+          "type": "string"
+        },
+        "title": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Title",
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "accepted",
+            "rejected",
+            "failed",
+            "over_budget",
+            "cancelled",
+            "running",
+            "not_reached"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "artifact": {
+          "default": null,
+          "title": "Artifact"
+        },
+        "artifact_omitted_bytes": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Artifact Omitted Bytes"
+        },
+        "returned_raw": {
+          "anyOf": [
+            {
+              "maxLength": 20000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Returned Raw"
+        },
+        "checks": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/OutputCheck"
+          },
+          "maxItems": 64,
+          "title": "Checks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "step_id",
+        "outcome"
+      ],
+      "title": "StepOutput",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "knowbot-test-run/v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[A-Za-z0-9._:-]{8,128}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "case_id": {
+      "pattern": "^[A-Za-z0-9._-]{1,64}$",
+      "title": "Case Id",
+      "type": "string"
+    },
+    "deliverable": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Deliverable"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "deliverable_note": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Deliverable Note"
+    },
+    "steps": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/StepOutput"
+      },
+      "maxItems": 200,
+      "title": "Steps",
+      "type": "array"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error"
+    }
+  },
+  "required": [
+    "contract",
+    "run_id",
+    "case_id"
+  ],
+  "title": "knowbot-test-run v1 case outputs",
+  "type": "object"
+}
