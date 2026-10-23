@@ -47,6 +47,33 @@
       "title": "CaseInput",
       "type": "object"
     },
+    "DataGrant": {
+      "additionalProperties": false,
+      "description": "测试运行授权（SDD 0042 第七节）：knowbase 签给运行方的，只读绑定的这几份。\n\n运行方把这几份钉进每条用例的委托，凭授权向 knowbase 读、核摘要；\n测试结束 knowlab 撤。\nv1 冻结后加的可选字段：没有它时运行方照旧经 knowlab 读（knowbot-data/v1）。",
+      "properties": {
+        "grant_id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Grant Id",
+          "type": "string"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/$defs/GrantedData"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "required": [
+        "grant_id",
+        "items"
+      ],
+      "title": "DataGrant",
+      "type": "object"
+    },
     "Expectation": {
       "additionalProperties": false,
       "description": "用户定的「怎样算对」：在最后的交回物里，某一项应当等于、约等于或包含什么。",
@@ -111,6 +138,55 @@
         "value"
       ],
       "title": "Expectation",
+      "type": "object"
+    },
+    "GrantedData": {
+      "additionalProperties": false,
+      "description": "测试读的一份：knowlab 的数据编号与 knowbase 那份。\n\n清单绑定、格子地址、引文写的都是 knowlab 的数据编号。",
+      "properties": {
+        "dataset_id": {
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "item_id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Item Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 255,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "media_type": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Media Type",
+          "type": "string"
+        },
+        "size_bytes": {
+          "minimum": 1,
+          "title": "Size Bytes",
+          "type": "integer"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dataset_id",
+        "item_id",
+        "name",
+        "media_type",
+        "size_bytes",
+        "sha256"
+      ],
+      "title": "GrantedData",
       "type": "object"
     },
     "RunCase": {
@@ -188,6 +264,17 @@
       "minimum": 60,
       "title": "Max Wait Seconds",
       "type": "integer"
+    },
+    "data_grant": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DataGrant"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     }
   },
   "required": [
