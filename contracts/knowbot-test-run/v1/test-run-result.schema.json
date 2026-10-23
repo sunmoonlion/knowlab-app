@@ -401,6 +401,22 @@
         }
       ],
       "default": null
+    },
+    "blocked": {
+      "anyOf": [
+        {
+          "enum": [
+            "computer_offline",
+            "folder_not_ready"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Blocked"
     }
   },
   "required": [
