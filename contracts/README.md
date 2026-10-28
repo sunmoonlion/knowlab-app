@@ -9,3 +9,5 @@
 不在本仓放 knowmart schema 的副本。并列检出 `knowmart-app` 时，后端测试 `tests/test_knowbot_contract_locks.py` 核锁与提供方一致，并用提供方 schema 校验本仓的样例清单。
 
 10-28（decisions ⑰）删了 `knowbot-data/v1/`（运行方经 knowlab 读用户数据；数据改在 knowbase `user-data/v2`，测试集按用例签授权）与清单 v1 的锁 `knowmart-knowbot-manifest-lock.json`；`knowbot-test-run/v1` 的请求随之去掉 v1 测试运行授权 `data_grant`（用例的 `data` 照旧）。
+
+10-28（decisions ⑯）测试都在作者的账号下跑：`knowbot-test-run/v1` 请求的 `runner` 改成必填，只有用户本人一种（`kind: "user"`，带电脑 `environment_id` 与工作区根目录 `workspace_root`）；原来缺省的「平台的测试账号与测试电脑」删了。运营发起的平台测试也带作者上次自助测试用过的电脑与目录。运行方的锁 `knowbench-app/contracts/knowlab-test-run-lock.json` 跟着更新。

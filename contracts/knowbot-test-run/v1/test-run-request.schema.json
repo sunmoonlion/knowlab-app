@@ -290,46 +290,29 @@
     },
     "Runner": {
       "additionalProperties": false,
-      "description": "谁跑这次测试（SDD 0046 第三节）：平台的测试账号（缺省），或用户本人——跑在他接入\n的电脑、他选的工作区根目录、他的模型 key，他出钱。v1 冻结后加的可选字段。",
+      "description": "谁跑这次测试（SDD 0046 第三节，decisions ⑯）：只有用户本人——跑在他接入的电脑、\n他选的工作区根目录、他的模型 key，他出钱。平台测试也在作者的账号下跑，平台的测试\n账号与测试电脑不再用于测试（10-28 起必填，原为可选、缺省是平台的测试账号）。",
       "properties": {
         "kind": {
-          "enum": [
-            "platform",
-            "user"
-          ],
+          "const": "user",
           "title": "Kind",
           "type": "string"
         },
         "environment_id": {
-          "anyOf": [
-            {
-              "pattern": "^[0-9a-f-]{36}$",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Environment Id"
+          "pattern": "^[0-9a-f-]{36}$",
+          "title": "Environment Id",
+          "type": "string"
         },
         "workspace_root": {
-          "anyOf": [
-            {
-              "maxLength": 1024,
-              "minLength": 1,
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Workspace Root"
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Workspace Root",
+          "type": "string"
         }
       },
       "required": [
-        "kind"
+        "kind",
+        "environment_id",
+        "workspace_root"
       ],
       "title": "Runner",
       "type": "object"
@@ -383,15 +366,7 @@
       "type": "integer"
     },
     "runner": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/Runner"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null
+      "$ref": "#/$defs/Runner"
     }
   },
   "required": [
@@ -401,7 +376,8 @@
     "manifest",
     "cases",
     "budget",
-    "timeout_seconds"
+    "timeout_seconds",
+    "runner"
   ],
   "title": "knowbot-test-run v1 request",
   "type": "object"
