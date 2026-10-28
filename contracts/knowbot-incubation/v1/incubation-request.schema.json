@@ -1,0 +1,776 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-incubation/v1/incubation-request.schema.json",
+  "$defs": {
+    "Advanced": {
+      "additionalProperties": false,
+      "description": "工程层（第 7.2 节「高级」）：不填就用程序生成的。",
+      "properties": {
+        "tools": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 30,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tools"
+        },
+        "reserve": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9]{1,4}(\\.[0-9]{1,4})?$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reserve"
+        },
+        "input_max_chars": {
+          "anyOf": [
+            {
+              "maximum": 200000,
+              "minimum": 500,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Input Max Chars"
+        },
+        "output_schema": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output Schema"
+        },
+        "output_file": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output File"
+        }
+      },
+      "title": "Advanced",
+      "type": "object"
+    },
+    "AnsweredGap": {
+      "additionalProperties": false,
+      "description": "作者答过的缺口：问题、当时的提议、作者的答复。出处 answer 的 ref 指 id。",
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "question": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "proposal": {
+          "default": "",
+          "maxLength": 4000,
+          "title": "Proposal",
+          "type": "string"
+        },
+        "answer": {
+          "maxLength": 4000,
+          "minLength": 1,
+          "title": "Answer",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "question",
+        "answer"
+      ],
+      "title": "AnsweredGap",
+      "type": "object"
+    },
+    "AskBeforeCell": {
+      "additionalProperties": false,
+      "description": "开步前问用户什么：问题，可以给几个选项（选项是给用户看的字）。",
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9_-]{1,32}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "question": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Question",
+          "type": "string"
+        },
+        "options": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Options",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "AskBeforeCell",
+      "type": "object"
+    },
+    "Budget": {
+      "additionalProperties": false,
+      "properties": {
+        "limit": {
+          "pattern": "^[0-9]{1,6}(\\.[0-9]{1,2})?$",
+          "title": "Limit",
+          "type": "string"
+        },
+        "currency": {
+          "const": "CNY",
+          "default": "CNY",
+          "title": "Currency",
+          "type": "string"
+        }
+      },
+      "required": [
+        "limit"
+      ],
+      "title": "Budget",
+      "type": "object"
+    },
+    "CellSource": {
+      "additionalProperties": false,
+      "description": "工作稿一格的出处（第 9.1 节）：作者写的 user_text，接受或答过的\nuser_confirmed；ref 指编辑记录、接受记录或答过的问题。模型凭它认出哪些格子是\n作者的，只能提修改建议。",
+      "properties": {
+        "kind": {
+          "enum": [
+            "user_text",
+            "user_confirmed"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "ref": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "ref"
+      ],
+      "title": "CellSource",
+      "type": "object"
+    },
+    "CheckCell": {
+      "additionalProperties": false,
+      "description": "怎样算对：选一个验收模板，再填参数（参数在 compile 时逐个核）。",
+      "properties": {
+        "template": {
+          "enum": [
+            "required",
+            "non_empty",
+            "list_min",
+            "list_empty",
+            "blank",
+            "each_has",
+            "all_equal",
+            "computed",
+            "identity",
+            "sourced",
+            "quoted",
+            "covers",
+            "max_chars"
+          ],
+          "title": "Template",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        }
+      },
+      "required": [
+        "template"
+      ],
+      "title": "CheckCell",
+      "type": "object"
+    },
+    "DataFormat": {
+      "additionalProperties": false,
+      "description": "作者挑的一份数据的格式：名字与各表的表名、列标签、行标签，不含内容\n（0029 第 6.4 节）。",
+      "properties": {
+        "name": {
+          "maxLength": 255,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "tables": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TableFormat"
+          },
+          "maxItems": 50,
+          "title": "Tables",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "DataFormat",
+      "type": "object"
+    },
+    "OnFail": {
+      "additionalProperties": false,
+      "description": "没过怎么办：默认重做一次，再不过停下来问；可以改成退回前面某一步，或直接问。",
+      "properties": {
+        "kind": {
+          "default": "rework",
+          "enum": [
+            "rework",
+            "back",
+            "ask"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "back_to": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Back To"
+        }
+      },
+      "title": "OnFail",
+      "type": "object"
+    },
+    "OutputCell": {
+      "additionalProperties": false,
+      "description": "交回哪几项：名字、类型（数、表、文字、列表）；列表与表再列每项有哪几项。",
+      "properties": {
+        "name": {
+          "pattern": "^[^\\s./\\\\\\\"'（）()、，,；;：:]{1,64}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "number",
+            "table",
+            "text",
+            "list"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "items": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/OutputField"
+              },
+              "maxItems": 30,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Items"
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ],
+      "title": "OutputCell",
+      "type": "object"
+    },
+    "OutputField": {
+      "additionalProperties": false,
+      "description": "列表、表的每项有哪几项。",
+      "properties": {
+        "name": {
+          "pattern": "^[^\\s./\\\\\\\"'（）()、，,；;：:]{1,64}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "default": "text",
+          "enum": [
+            "number",
+            "text"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "OutputField",
+      "type": "object"
+    },
+    "RuleCell": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9_-]{1,32}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "text": {
+          "default": "",
+          "maxLength": 4000,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "RuleCell",
+      "type": "object"
+    },
+    "Runner": {
+      "additionalProperties": false,
+      "description": "谁跑这一轮（decisions ⑯，第 8.5 节）：只有作者本人——他接入的电脑、他选的\n工作区根目录、他的模型 key，他出钱。运行方在这个根目录下建固定的「孵化」子目录\n与项目。形状同测试的 Runner。",
+      "properties": {
+        "kind": {
+          "const": "user",
+          "title": "Kind",
+          "type": "string"
+        },
+        "environment_id": {
+          "pattern": "^[0-9a-f-]{36}$",
+          "title": "Environment Id",
+          "type": "string"
+        },
+        "workspace_root": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Workspace Root",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "environment_id",
+        "workspace_root"
+      ],
+      "title": "Runner",
+      "type": "object"
+    },
+    "ScopeCell": {
+      "additionalProperties": false,
+      "properties": {
+        "does": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Does",
+          "type": "string"
+        },
+        "does_not": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Does Not",
+          "type": "string"
+        },
+        "elsewhere": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Elsewhere",
+          "type": "string"
+        }
+      },
+      "title": "ScopeCell",
+      "type": "object"
+    },
+    "Seed": {
+      "additionalProperties": false,
+      "description": "创意原文（第四节第 1 条）：一句话问题、六问（knowlab 拼成带题目的白话）\n或 skill。出处 idea 的 quote 要逐字出现在这里。",
+      "properties": {
+        "kind": {
+          "enum": [
+            "question",
+            "six_questions",
+            "skill"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 60000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "text"
+      ],
+      "title": "Seed",
+      "type": "object"
+    },
+    "StepCell": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "default": "",
+          "maxLength": 80,
+          "title": "Title",
+          "type": "string"
+        },
+        "does": {
+          "default": "",
+          "maxLength": 20000,
+          "title": "Does",
+          "type": "string"
+        },
+        "why": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Why",
+          "type": "string"
+        },
+        "uses": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Uses",
+          "type": "array"
+        },
+        "rules": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RuleCell"
+          },
+          "maxItems": 50,
+          "title": "Rules",
+          "type": "array"
+        },
+        "ask_before": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/AskBeforeCell"
+          },
+          "maxItems": 10,
+          "title": "Ask Before",
+          "type": "array"
+        },
+        "outputs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/OutputCell"
+          },
+          "maxItems": 30,
+          "title": "Outputs",
+          "type": "array"
+        },
+        "checks": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/CheckCell"
+          },
+          "maxItems": 50,
+          "title": "Checks",
+          "type": "array"
+        },
+        "on_fail": {
+          "$ref": "#/$defs/OnFail",
+          "default": {
+            "kind": "rework",
+            "back_to": null
+          }
+        },
+        "advanced": {
+          "$ref": "#/$defs/Advanced",
+          "default": {
+            "tools": null,
+            "reserve": null,
+            "input_max_chars": null,
+            "output_schema": null,
+            "output_file": null
+          }
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "StepCell",
+      "type": "object"
+    },
+    "TableFormat": {
+      "additionalProperties": false,
+      "description": "一张表的格式：表名、列标签、行标签（0030 的表格读取取表头与第一列，不取数）。",
+      "properties": {
+        "name": {
+          "default": "",
+          "maxLength": 255,
+          "title": "Name",
+          "type": "string"
+        },
+        "columns": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 200,
+          "title": "Columns",
+          "type": "array"
+        },
+        "rows": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 500,
+          "title": "Rows",
+          "type": "array"
+        }
+      },
+      "title": "TableFormat",
+      "type": "object"
+    },
+    "Workdraft": {
+      "additionalProperties": false,
+      "description": "当前工作稿：方法层的格子（含「高级」，模型只读不改）与每格出处（键是格子路径）。",
+      "properties": {
+        "body": {
+          "$ref": "#/$defs/WorkdraftBody",
+          "default": {
+            "name": "",
+            "tagline": "",
+            "scope": {
+              "does": "",
+              "does_not": "",
+              "elsewhere": ""
+            },
+            "data_picks": [],
+            "steps": []
+          }
+        },
+        "sources": {
+          "additionalProperties": {
+            "$ref": "#/$defs/CellSource"
+          },
+          "maxProperties": 5000,
+          "title": "Sources",
+          "type": "object"
+        }
+      },
+      "title": "Workdraft",
+      "type": "object"
+    },
+    "WorkdraftBody": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "default": "",
+          "maxLength": 80,
+          "title": "Name",
+          "type": "string"
+        },
+        "tagline": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Tagline",
+          "type": "string"
+        },
+        "scope": {
+          "$ref": "#/$defs/ScopeCell",
+          "default": {
+            "does": "",
+            "does_not": "",
+            "elsewhere": ""
+          }
+        },
+        "data_picks": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 200,
+          "title": "Data Picks",
+          "type": "array"
+        },
+        "steps": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/StepCell"
+          },
+          "maxItems": 30,
+          "title": "Steps",
+          "type": "array"
+        }
+      },
+      "title": "WorkdraftBody",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "knowbot-incubation/v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "incubation_id": {
+      "pattern": "^[A-Za-z0-9._:-]{8,128}$",
+      "title": "Incubation Id",
+      "type": "string"
+    },
+    "owner_subject": {
+      "pattern": "^[A-Za-z0-9._:@-]{1,512}$",
+      "title": "Owner Subject",
+      "type": "string"
+    },
+    "action": {
+      "enum": [
+        "draft",
+        "revise"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "instruction": {
+      "anyOf": [
+        {
+          "maxLength": 4000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Instruction"
+    },
+    "step_id": {
+      "anyOf": [
+        {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Step Id"
+    },
+    "seed": {
+      "$ref": "#/$defs/Seed"
+    },
+    "workdraft": {
+      "$ref": "#/$defs/Workdraft",
+      "default": {
+        "body": {
+          "data_picks": [],
+          "name": "",
+          "scope": {
+            "does": "",
+            "does_not": "",
+            "elsewhere": ""
+          },
+          "steps": [],
+          "tagline": ""
+        },
+        "sources": {}
+      }
+    },
+    "answers": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/AnsweredGap"
+      },
+      "maxItems": 200,
+      "title": "Answers",
+      "type": "array"
+    },
+    "data_formats": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/DataFormat"
+      },
+      "maxItems": 200,
+      "title": "Data Formats",
+      "type": "array"
+    },
+    "budget": {
+      "$ref": "#/$defs/Budget"
+    },
+    "timeout_seconds": {
+      "maximum": 86400,
+      "minimum": 60,
+      "title": "Timeout Seconds",
+      "type": "integer"
+    },
+    "runner": {
+      "$ref": "#/$defs/Runner"
+    }
+  },
+  "required": [
+    "contract",
+    "incubation_id",
+    "owner_subject",
+    "action",
+    "seed",
+    "budget",
+    "timeout_seconds",
+    "runner"
+  ],
+  "title": "knowbot-incubation v1 request",
+  "type": "object"
+}

@@ -1,0 +1,349 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-incubation/v1/incubation-result.schema.json",
+  "$defs": {
+    "Cost": {
+      "additionalProperties": false,
+      "properties": {
+        "spent": {
+          "pattern": "^[0-9]{1,9}(\\.[0-9]{1,6})?$",
+          "title": "Spent",
+          "type": "string"
+        },
+        "currency": {
+          "const": "CNY",
+          "default": "CNY",
+          "title": "Currency",
+          "type": "string"
+        }
+      },
+      "required": [
+        "spent"
+      ],
+      "title": "Cost",
+      "type": "object"
+    },
+    "Gap": {
+      "additionalProperties": false,
+      "description": "缺口（第 8.4 节）：要作者定的判断，写成一个问题，附提议与选项；进「待办」\n由作者答。",
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9_-]{1,32}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "question": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "proposal": {
+          "maxLength": 4000,
+          "minLength": 1,
+          "title": "Proposal",
+          "type": "string"
+        },
+        "options": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "title": "Options",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "question",
+        "proposal"
+      ],
+      "title": "Gap",
+      "type": "object"
+    },
+    "Handback": {
+      "additionalProperties": false,
+      "properties": {
+        "sources": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/SourceEntry"
+          },
+          "maxItems": 2000,
+          "title": "Sources",
+          "type": "array"
+        },
+        "gaps": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Gap"
+          },
+          "maxItems": 200,
+          "title": "Gaps",
+          "type": "array"
+        },
+        "suggestions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Suggestion"
+          },
+          "maxItems": 500,
+          "title": "Suggestions",
+          "type": "array"
+        },
+        "self_check": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/SelfCheck"
+          },
+          "maxItems": 500,
+          "title": "Self Check",
+          "type": "array"
+        }
+      },
+      "title": "Handback",
+      "type": "object"
+    },
+    "SelfCheck": {
+      "additionalProperties": false,
+      "description": "自查（第 8.2 节第 4 条）：一条起草时的建议对不上出处或碰到了判断，已经改成\n了这个缺口（turned_into_gap 是缺口编号）；那条建议不再在建议里。",
+      "properties": {
+        "suggestion_id": {
+          "pattern": "^[A-Za-z0-9_-]{1,32}$",
+          "title": "Suggestion Id",
+          "type": "string"
+        },
+        "turned_into_gap": {
+          "pattern": "^[A-Za-z0-9_-]{1,32}$",
+          "title": "Turned Into Gap",
+          "type": "string"
+        }
+      },
+      "required": [
+        "suggestion_id",
+        "turned_into_gap"
+      ],
+      "title": "SelfCheck",
+      "type": "object"
+    },
+    "SourceEntry": {
+      "additionalProperties": false,
+      "description": "出处表的一行（第 8.2、9.1 节）：建议里的一格出自哪里。\n\nidea：创意里逐字的一句（quote，knowlab 核它逐字出现在这一版创意里）；\nanswer：某个答过的缺口（ref 是它的 id）；proposal：AI 的提议，作者接受时页面\n照实标「这是 AI 的提议」。",
+      "properties": {
+        "path": {
+          "pattern": "^(name|tagline|scope|scope/(does|does_not|elsewhere)|steps/[A-Za-z][A-Za-z0-9_-]{0,47}(/(title|does|why|uses|rules|ask_before|outputs|checks|on_fail))?|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/rules/[A-Za-z0-9_-]{1,32}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/ask_before/[A-Za-z0-9_-]{1,32}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/outputs/[^\\s./\\\\\\\"'（）()、，,；;：:]{1,64}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/checks/[0-9]{1,2})$",
+          "title": "Path",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "idea",
+            "answer",
+            "proposal"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "quote": {
+          "anyOf": [
+            {
+              "maxLength": 4000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quote"
+        },
+        "ref": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ref"
+        }
+      },
+      "required": [
+        "path",
+        "kind"
+      ],
+      "title": "SourceEntry",
+      "type": "object"
+    },
+    "Suggestion": {
+      "additionalProperties": false,
+      "description": "对工作稿一格的改动（第 8.3 节），作者接受了才进稿。\n\n路径与 value 的形状同工作稿格子（knowlab workdraft.apply）：set 换掉一格或一块，\nadd 加一步、一条规则、一个交回项、一条验收，remove 删掉（不带 value），move 把\n一步或一条挪到第 value 位（从 0 起）。",
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9_-]{1,32}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^(name|tagline|scope|scope/(does|does_not|elsewhere)|steps/[A-Za-z][A-Za-z0-9_-]{0,47}(/(title|does|why|uses|rules|ask_before|outputs|checks|on_fail))?|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/rules/[A-Za-z0-9_-]{1,32}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/ask_before/[A-Za-z0-9_-]{1,32}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/outputs/[^\\s./\\\\\\\"'（）()、，,；;：:]{1,64}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/checks/[0-9]{1,2})$",
+          "title": "Path",
+          "type": "string"
+        },
+        "op": {
+          "enum": [
+            "set",
+            "add",
+            "remove",
+            "move"
+          ],
+          "title": "Op",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        },
+        "reason": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "op",
+        "reason"
+      ],
+      "title": "Suggestion",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "knowbot-incubation/v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "incubation_id": {
+      "pattern": "^[A-Za-z0-9._:-]{8,128}$",
+      "title": "Incubation Id",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "queued",
+        "running",
+        "waiting",
+        "succeeded",
+        "failed",
+        "over_budget",
+        "cancelled"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "cost": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Cost"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "error": {
+      "anyOf": [
+        {
+          "maxLength": 1000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error"
+    },
+    "task_id": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f-]{36}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Task Id"
+    },
+    "waiting_for": {
+      "anyOf": [
+        {
+          "enum": [
+            "computer_offline",
+            "folder_not_ready"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Waiting For"
+    },
+    "started_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Started At"
+    },
+    "finished_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Finished At"
+    },
+    "handback": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Handback"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "contract",
+    "incubation_id",
+    "status"
+  ],
+  "title": "knowbot-incubation v1 result",
+  "type": "object"
+}

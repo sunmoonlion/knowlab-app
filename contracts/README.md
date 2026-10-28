@@ -3,6 +3,7 @@
 | 目录或文件 | 角色 | 说明 |
 | --- | --- | --- |
 | `knowbot-test-run/v1/` | **提供方（真源）** | 运行方跑测试的契约（SDD 0027 决定 12）。由后端 `app/domain/knowbots/test_run.py` 的模型生成：在 `knowlab-backend/app` 下 `python -m app.domain.knowbots.schema`；测试核文件与模型逐字一致。运行方实现它，入口统一为 `/api/internal/v1/knowbot-runtime/test-runs` |
+| `knowbot-incubation/v1/` | **提供方（真源）** | 运行方跑孵化的一轮（专家孵化方案第八节，decisions ⑮⑯）：作者点「AI 起草」或「让 AI 改…」，交过去动作与指令、创意原文、当前工作稿（格子与每格出处）、答过的缺口、作者挑的数据的格式（不含内容）、费用上限与作者的电脑；交回来出处表、缺口表、建议、自查。判断只出缺口、建议不碰工程层由模型守。同一个生成命令生成，真源 `app/domain/knowbots/incubation.py`，测试 `tests/test_knowbot_incubation_contract.py`。运行方入口 `/api/internal/v1/knowbot-runtime/incubations`（收、查、取消），服务关系 `knowbench:incubate` |
 | `knowmart-knowbot-manifest-v2-lock.json` | 调用方（锁） | knowlab 向 knowmart 交付的分身清单 v2，真源在 `knowmart-app/contracts/knowbot/v2/`。锁只 pin major、schema 路径与 sha256；升级须提供方改 schema、两端测试都过，才更新锁。草稿只认 v2（decisions ⑰，10-28 起不留 v1） |
 | `knowbase-data-request-lock.json` | 调用方（锁） | 一样数据的描述 `data-request/v1`，真源在 `knowbase-app/contracts/data-request/v1/`；测试时第 0 步按它提出要哪些数据、作者确认成测试集（块 7）。模型在 `app/domain/knowbots/data_request.py`，`tests/test_knowbot_contract_locks.py` 核锁与真源、本仓生成的 schema 与真源一致（不计说明文字）。10-28 起清单 v2 不再有数据需求声明（decisions ⑭），取代原 `knowbase-data-needs-lock.json` |
 
