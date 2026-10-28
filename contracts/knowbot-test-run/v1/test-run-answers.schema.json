@@ -54,6 +54,17 @@
           "default": null,
           "title": "Text"
         },
+        "data": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CaseData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "answered_by": {
           "enum": [
             "operator",
@@ -68,6 +79,142 @@
         "answered_by"
       ],
       "title": "Answer",
+      "type": "object"
+    },
+    "CaseData": {
+      "additionalProperties": false,
+      "description": "一条用例用的数据（清单 v2，SDD 0046 第三节）：knowbase 签的这条用例的测试运行\n授权与钉住的几份。用例带了就不跑第 0 步；回答 `data` 问题时也是这个形状（几份都\n不要时 items 为空、不带授权）。",
+      "properties": {
+        "grant_id": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Grant Id"
+        },
+        "items": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/PinnedInput"
+          },
+          "maxItems": 200,
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "title": "CaseData",
+      "type": "object"
+    },
+    "PinnedInput": {
+      "additionalProperties": false,
+      "description": "测试集里钉住的一份（清单 v2，SDD 0043 第 2.9 节）：资料、内容版本、读法与摘要、\n权利依据。",
+      "properties": {
+        "material_id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Material Id",
+          "type": "string"
+        },
+        "version_no": {
+          "minimum": 1,
+          "title": "Version No",
+          "type": "integer"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "rendition_kind": {
+          "anyOf": [
+            {
+              "maxLength": 16,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rendition Kind"
+        },
+        "rendition_no": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rendition No"
+        },
+        "rendition_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rendition Sha256"
+        },
+        "basis": {
+          "enum": [
+            "display",
+            "reference",
+            "public",
+            "frozen_binding"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "basis_ref": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Basis Ref",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 255,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "media_type": {
+          "default": "",
+          "maxLength": 128,
+          "title": "Media Type",
+          "type": "string"
+        },
+        "size_bytes": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Size Bytes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "material_id",
+        "version_no",
+        "sha256",
+        "basis",
+        "basis_ref",
+        "name"
+      ],
+      "title": "PinnedInput",
       "type": "object"
     }
   },

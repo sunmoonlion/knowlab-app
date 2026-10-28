@@ -105,7 +105,7 @@
     },
     "PendingQuestion": {
       "additionalProperties": false,
-      "description": "跑到要人决定的地方。tool_approval：能不能做这件事（运营答）；question：Codex\n反问；ask_before：开步前的提问（key 是清单里提问的 id，答案可记回用例）。",
+      "description": "跑到要人决定的地方。tool_approval：能不能做这件事（运营答）；question：Codex\n反问；ask_before：开步前的提问（key 是清单里提问的 id，答案可记回用例）；data：\n第 0 步或运行中专家提出要哪些数据（`requests`，契约 knowbase `data-request/v1` 的\n形状），作者本人确认，回答带 `data`（SDD 0046 第三节）。",
       "properties": {
         "question_id": {
           "pattern": "^[A-Za-z0-9._:-]{1,128}$",
@@ -134,7 +134,8 @@
           "enum": [
             "tool_approval",
             "question",
-            "ask_before"
+            "ask_before",
+            "data"
           ],
           "title": "Kind",
           "type": "string"
@@ -177,6 +178,16 @@
           "minLength": 1,
           "title": "Asked At",
           "type": "string"
+        },
+        "requests": {
+          "default": [],
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "maxItems": 20,
+          "title": "Requests",
+          "type": "array"
         }
       },
       "required": [
