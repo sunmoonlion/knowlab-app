@@ -228,15 +228,127 @@
       "title": "CheckCell",
       "type": "object"
     },
+    "DataDescription": {
+      "additionalProperties": false,
+      "description": "一份数据在 knowbase 里的描述（0049 的几维：主体、类型、期间、格式、语言）。是\n描述，不是内容；作者自己确认过或系统识别的，照 knowbase 给的转过来。",
+      "properties": {
+        "subject": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subject"
+        },
+        "doc_type": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Doc Type"
+        },
+        "period_start": {
+          "anyOf": [
+            {
+              "maxLength": 10,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Period Start"
+        },
+        "period_end": {
+          "anyOf": [
+            {
+              "maxLength": 10,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Period End"
+        },
+        "data_format": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data Format"
+        },
+        "language": {
+          "anyOf": [
+            {
+              "maxLength": 16,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Language"
+        }
+      },
+      "title": "DataDescription",
+      "type": "object"
+    },
     "DataFormat": {
       "additionalProperties": false,
-      "description": "作者挑的一份数据的格式：名字与各表的表名、列标签、行标签，不含内容\n（0029 第 6.4 节）。",
+      "description": "作者挑的一份数据的格式（0029 第 6.4 节、专家孵化方案第 8.2 节）：名字、文件类型、\n描述的几维、有哪几种读法（正文、按页文字、表格……已就绪的），各表的表名、列标签、\n行标签；不含内容。knowbase 现在不给本人读表头的接口，tables 先空着。",
       "properties": {
         "name": {
           "maxLength": 255,
           "minLength": 1,
           "title": "Name",
           "type": "string"
+        },
+        "media_type": {
+          "default": "",
+          "maxLength": 128,
+          "title": "Media Type",
+          "type": "string"
+        },
+        "description": {
+          "$ref": "#/$defs/DataDescription",
+          "default": {
+            "subject": null,
+            "doc_type": null,
+            "period_start": null,
+            "period_end": null,
+            "data_format": null,
+            "language": null
+          }
+        },
+        "readings": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "title": "Readings",
+          "type": "array"
         },
         "tables": {
           "default": [],
@@ -252,6 +364,190 @@
         "name"
       ],
       "title": "DataFormat",
+      "type": "object"
+    },
+    "LatestTest": {
+      "additionalProperties": false,
+      "description": "最近一次有结论的测试的报告（专家孵化方案第 8.4 节「带上测试报告让 AI 改」，0029\n第三节第 5 步）：第几次、测的是准专家第几版、通过没有、每条用例每一步的结果。只有\n报告：成稿、各步交回物、测试数据都不给（0029 第 6.4 节，模型不看数据的内容）。",
+      "properties": {
+        "number": {
+          "minimum": 1,
+          "title": "Number",
+          "type": "integer"
+        },
+        "draft_version": {
+          "maxLength": 32,
+          "minLength": 1,
+          "title": "Draft Version",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "cases": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/LatestTestCase"
+          },
+          "maxItems": 50,
+          "title": "Cases",
+          "type": "array"
+        }
+      },
+      "required": [
+        "number",
+        "draft_version",
+        "status"
+      ],
+      "title": "LatestTest",
+      "type": "object"
+    },
+    "LatestTestCase": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "pattern": "^[A-Za-z0-9._-]{1,64}$",
+          "title": "Case Id",
+          "type": "string"
+        },
+        "question": {
+          "maxLength": 4000,
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "needs_human",
+            "error"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "steps": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/LatestTestStep"
+          },
+          "maxItems": 200,
+          "title": "Steps",
+          "type": "array"
+        },
+        "expectations": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/LatestTestExpectation"
+          },
+          "maxItems": 64,
+          "title": "Expectations",
+          "type": "array"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "case_id",
+        "question",
+        "status"
+      ],
+      "title": "LatestTestCase",
+      "type": "object"
+    },
+    "LatestTestExpectation": {
+      "additionalProperties": false,
+      "description": "作者给这条用例定的一条期望核没核上：哪个交回物的哪一项、怎么比。期望值本身\n不给：模型照着期望值改方法，等于把答案写进规则。",
+      "properties": {
+        "artifact": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Artifact",
+          "type": "string"
+        },
+        "path": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "equals",
+            "approx",
+            "contains"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "artifact",
+        "path",
+        "kind",
+        "passed"
+      ],
+      "title": "LatestTestExpectation",
+      "type": "object"
+    },
+    "LatestTestStep": {
+      "additionalProperties": false,
+      "description": "报告里一步的结果：过没过、没过的验收名、一条一句为什么没过（同测试契约）。",
+      "properties": {
+        "step_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Step Id",
+          "type": "string"
+        },
+        "accepted": {
+          "title": "Accepted",
+          "type": "boolean"
+        },
+        "failed_checks": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Failed Checks",
+          "type": "array"
+        },
+        "details": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Details",
+          "type": "array"
+        }
+      },
+      "required": [
+        "step_id",
+        "accepted"
+      ],
+      "title": "LatestTestStep",
       "type": "object"
     },
     "OnFail": {
@@ -761,6 +1057,17 @@
       "maxItems": 200,
       "title": "Data Formats",
       "type": "array"
+    },
+    "test_report": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LatestTest"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "budget": {
       "$ref": "#/$defs/Budget"
