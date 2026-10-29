@@ -713,6 +713,20 @@
     "seed": {
       "$ref": "#/$defs/Seed"
     },
+    "reference": {
+      "anyOf": [
+        {
+          "maxLength": 20000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reference"
+    },
     "workdraft": {
       "$ref": "#/$defs/Workdraft",
       "default": {
