@@ -1,0 +1,7 @@
+{
+  "provider": "knowfeed-app",
+  "contract": "knowfeed-supply-status/v1",
+  "major_version": 1,
+  "schema": "contracts/supply-status/v1/demand-status.schema.json",
+  "sha256": "63d70a6b787388d0b8709d2c9db855179265dfec588a5dad4427060cf09af1eb"
+}
