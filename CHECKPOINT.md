@@ -41,3 +41,12 @@ feat/dynamic-methods 已完成第一单元作者/运行契约，后端 dad9b0e20
 迁移头 20261102_0025，前版 20261101_0024；空库退/升测试通过，非空方法历史阻止破坏性 downgrade，回退应用保留 schema。全量 760 passed / 5 skipped，新增故障案例后最终相关四文件 32 passed；整个 knowlab 后端 ruff/pyright 已通过，旧静态债务已清（CategoryCode 枚举及 schema 与原版完全一致）。详细证据见后端 CHECKPOINT.md。
 
 下一段保存专家精确引用、选择/升级确认、编译版本与快照核验，并同步 knowmart/knowbench 契约/锁。当前只完成主档与预览，不能声称跨专家运行验收完成。发版仍由 qwen 使用现有 Jenkins，本段无发布、无线上改动、无 Wind 调用。
+
+
+## 2026-11-02 WP-10：作者编译覆盖检查
+
+钉后端 256e726、前端 6699ce0，子仓先推 GitHub。covers 源/目标类型在作者工作稿
+编译时检查，错误不能冻结；历史快照仍按原 v1 翻译核摘要，新保存/绑定必须过当前
+检查。前端只对齐真实合成夹具，无产品 UI 变化。后端全量 807 passed / 5 skipped，
+前端 182 passed / 2 skipped；两端静态检查通过，详见子仓 CHECKPOINT。
+开发分支未发布，不改契约版本/迁移/生产采单，不把 agy 财务夹具作为生产资产。
