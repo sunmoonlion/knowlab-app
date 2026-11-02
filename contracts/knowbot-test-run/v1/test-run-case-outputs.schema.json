@@ -2,6 +2,33 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-test-run/v1/test-run-case-outputs.schema.json",
   "$defs": {
+    "AcceptedOutputRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[0-9a-f-]{36}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "digest"
+      ],
+      "title": "AcceptedOutputRef",
+      "type": "object"
+    },
     "Deliverable": {
       "additionalProperties": false,
       "description": "这条用例写稿那一步这次真写了的文件（项目内相对路径）与它的文字。",
@@ -41,6 +68,82 @@
         "text"
       ],
       "title": "Deliverable",
+      "type": "object"
+    },
+    "FinalOutput": {
+      "additionalProperties": false,
+      "description": "作者的最终方法名 → 此次计划选中的实例与确切已验成果。",
+      "properties": {
+        "method_id": {
+          "maxLength": 48,
+          "minLength": 1,
+          "title": "Method Id",
+          "type": "string"
+        },
+        "instance_id": {
+          "maxLength": 48,
+          "minLength": 1,
+          "title": "Instance Id",
+          "type": "string"
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AcceptedOutputRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "artifact": {
+          "default": null,
+          "title": "Artifact"
+        },
+        "artifact_omitted_bytes": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Artifact Omitted Bytes"
+        },
+        "deliverable": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Deliverable"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "method_id",
+        "instance_id"
+      ],
+      "title": "FinalOutput",
       "type": "object"
     },
     "OutputCheck": {
@@ -143,6 +246,18 @@
           "maxItems": 64,
           "title": "Checks",
           "type": "array"
+        },
+        "current": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Current"
         }
       },
       "required": [
@@ -215,6 +330,28 @@
       ],
       "default": null,
       "title": "Error"
+    },
+    "plan_version": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Plan Version"
+    },
+    "final_outputs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/FinalOutput"
+      },
+      "maxItems": 30,
+      "title": "Final Outputs",
+      "type": "array"
     }
   },
   "required": [

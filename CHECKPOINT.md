@@ -1,5 +1,24 @@
 # 2026-11-02 第二轨：WP-10 作者/运行契约
 
+## 最新增量：作者冻结、精确选版和动态测试页面
+
+后端 `c5bf88606bf058ecf9dc586223188e984949160c`，前端
+`a54e26c18c2ecaafe8385bc50d5052c8b69c516f`，均已推 GitHub
+`feat/method-execution-view`。父仓同步 author-method/v1 说明与两个子仓钉版。
+下文早期“未接页面/引用”的状态是历史记录，当前以后端和前端 CHECKPOINT 为准。
+
+真实方法列表、作者冻结、选择确切版本、输入预览与引用保存已接既有 API；工作稿保留
+规划和选择条件，绑定方法正文只读。作者测试展示全部最终成果及失效历史，兼容固定
+专家。列表元信息来自本人最新方法版本，精确读版与摘要核验不变，无新增迁移。
+
+后端全量 792 passed / 5 skipped，ruff/pyright 通过；前端 182 passed / 2 skipped，
+typecheck/lint/i18n（931 keys）/build 通过。合成 fixture 在前后端交叉核验。
+日志 `/tmp/luna-author-ui-lab-full.txt`、`/tmp/luna-author-flow-web-full.txt`。
+agy 初稿中的硬编码目录/占位引用未纳入，未确认的财务方法仍仅为候选测试材料。
+
+未发布，v3 外部准入仍关闭；真实作者流程与沙箱联合验收尚待进行。qwen 负责既有
+发布候选，本轮没有操作 Jenkins、sources、线上数据或 Wind。
+
 feat/dynamic-methods 已完成第一单元作者/运行契约，后端 dad9b0e20a8270747cfd999bacd7dafc3b2df6b0。显式 planning 与 selection 编译为 v3 动态目录；旧 v2 编译与摘要不变。作者确认方法单元、验收与工具边界，运行模型后续只能在冻结范围选择排序，不临时发明方法。计划存储/执行/UI 尚未实现，运行入口仍拒绝动态 v3。
 
 父仓增加 knowmart v3 和 knowbench dynamic-methods/v1 消费锁，同步孵化 v1 请求/结果 schema（可选字段、planning/selection 建议路径）。三方样例来自真实编译器输出，无真实财务数据。完整本地回归 736 passed / 5 skipped，/tmp/luna-wp10-lab-full-final.txt；改动文件 lint 和域类型检查通过。全仓原有 1 个类型、11 个 lint 问题与解包基线逐条相同，无新增；见后端 CHECKPOINT.md。
