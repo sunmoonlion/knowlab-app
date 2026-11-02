@@ -19,3 +19,5 @@
 10-28（decisions ⑰）删了 `knowbot-data/v1/`（运行方经 knowlab 读用户数据；数据改在 knowbase `user-data/v2`，测试集按用例签授权）与清单 v1 的锁 `knowmart-knowbot-manifest-lock.json`；`knowbot-test-run/v1` 的请求随之去掉 v1 测试运行授权 `data_grant`（用例的 `data` 照旧）。
 
 10-28（decisions ⑯）测试都在作者的账号下跑：`knowbot-test-run/v1` 请求的 `runner` 改成必填，只有用户本人一种（`kind: "user"`，带电脑 `environment_id` 与工作区根目录 `workspace_root`）；原来缺省的「平台的测试账号与测试电脑」删了。运营发起的平台测试也带作者上次自助测试用过的电脑与目录。运行方的锁 `knowbench-app/contracts/knowlab-test-run-lock.json` 跟着更新。
+
+WP-10 方法引用（开发契约，未发布）：工作稿 `method_refs` 由作者绑定 API 写入，普通编辑只读。引用清单使用 `dynamic-methods/v2`，`knowbench-dynamic-methods-v2-lock.json` 钉运行方 schema；`method_sources` 是独立主档的确切只读快照。导入/复制保留引用并核作者所有权，发布时回源验证。孵化请求可选引用字段及 knowbench 消费锁同步；原固定 v2 和动态目录 v1 schema 不变。

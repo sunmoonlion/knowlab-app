@@ -550,6 +550,42 @@
       "title": "LatestTestStep",
       "type": "object"
     },
+    "MethodReference": {
+      "additionalProperties": false,
+      "properties": {
+        "method_id": {
+          "format": "uuid",
+          "title": "Method Id",
+          "type": "string"
+        },
+        "version": {
+          "maximum": 999999,
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "inputs": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "maxProperties": 30,
+          "title": "Inputs",
+          "type": "object"
+        }
+      },
+      "required": [
+        "method_id",
+        "version",
+        "digest"
+      ],
+      "title": "MethodReference",
+      "type": "object"
+    },
     "MethodSelection": {
       "additionalProperties": false,
       "description": "作者确认的适用条件、必经与重复上限；不是任务模型新造的方法。",
@@ -1053,6 +1089,23 @@
             }
           ],
           "default": null
+        },
+        "method_refs": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/MethodReference"
+              },
+              "maxProperties": 30,
+              "minProperties": 1,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Method Refs"
         }
       },
       "title": "WorkdraftBody",
