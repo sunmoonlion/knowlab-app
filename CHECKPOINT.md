@@ -71,3 +71,8 @@ feat/dynamic-methods 已完成第一单元作者/运行契约，后端 dad9b0e20
 同步 knowbench 通用数值/行验收扩展 v1/v2 consumer 锁；54 项合成运行正反例，
 作者侧回归 110 passed/1 skipped，隔离 DB 15 passed，前端 183 passed/2 skipped。
 本批只是工程修复与候选测试资产；不宣称生产方法库导入或实战验收完成。
+
+
+追加复核：后端 f1bbcd3 修复 M20 来源标签为中立输入槽，跨专家别名装配测试通过。
+合回 Luna 后完整相关编译/方法/跨应用锁回归 117 passed（无跳过），运行侧 234 passed；
+最终 GitHub 子仓均可获取。金融真实样本与业务内容待验，不导入生产候选夹具。
