@@ -133,6 +133,17 @@
           ],
           "default": null,
           "title": "Tolerance"
+        },
+        "row": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RowSelection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "required": [
@@ -247,6 +258,46 @@
         "name"
       ],
       "title": "PinnedInput",
+      "type": "object"
+    },
+    "RowSelection": {
+      "additionalProperties": false,
+      "description": "在 path 指向的表中按列值唯一选行，再从该行的 field 点号路径取值。",
+      "properties": {
+        "where": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "maxProperties": 8,
+          "minProperties": 1,
+          "title": "Where",
+          "type": "object"
+        },
+        "field": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Field",
+          "type": "string"
+        }
+      },
+      "required": [
+        "where",
+        "field"
+      ],
+      "title": "RowSelection",
       "type": "object"
     },
     "RunCase": {
