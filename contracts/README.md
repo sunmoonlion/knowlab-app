@@ -35,3 +35,11 @@ WP-10 动态测试产出（开发契约，未发布）：沿用 `knowbot-test-ru
 旧固定专家不序列化新字段；请求、结果、回答 schema 字节不变，消费锁只更新产出摘要。
 作者测试页面应展示全部 final_outputs，兼容旧单文件，不能仅渲染 deliverable 判定无产出。
 该接口扩展不解除 v3 外部准入门；作者页面和真实沙箱仍须联调验收。
+
+L4 格式接入（2026-11-02 后续增量，未部署）：`knowbase-user-data-lock.json`
+钉 user-data/v2 的 `MaterialFormatRead`。GET
+`/api/internal/v2/user-data/materials/{material_id}/versions/{version_no}/format`
+用作者本人令牌读取已展示给 knowlab、使用权覆盖该版本的表轴；核版本与摘要后
+投影进既有 `DataFormat.tables`。CSV/XLSX 支持第一行/第一列标签，数据区数值与公式
+不传；PDF、旧 xls、正文无表轴。坏文件/撤回展示/契约不符不能降级为空。
+提供方先部署；`knowbot-incubation/v1` 只更新说明，消费锁摘要随之更新。
