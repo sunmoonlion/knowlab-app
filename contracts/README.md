@@ -21,3 +21,17 @@
 10-28（decisions ⑯）测试都在作者的账号下跑：`knowbot-test-run/v1` 请求的 `runner` 改成必填，只有用户本人一种（`kind: "user"`，带电脑 `environment_id` 与工作区根目录 `workspace_root`）；原来缺省的「平台的测试账号与测试电脑」删了。运营发起的平台测试也带作者上次自助测试用过的电脑与目录。运行方的锁 `knowbench-app/contracts/knowlab-test-run-lock.json` 跟着更新。
 
 WP-10 方法引用（开发契约，未发布）：工作稿 `method_refs` 由作者绑定 API 写入，普通编辑只读。引用清单使用 `dynamic-methods/v2`，`knowbench-dynamic-methods-v2-lock.json` 钉运行方 schema；`method_sources` 是独立主档的确切只读快照。导入/复制保留引用并核作者所有权，发布时回源验证。孵化请求可选引用字段及 knowbench 消费锁同步；原固定 v2 和动态目录 v1 schema 不变。
+
+WP-10 动态测试产出（开发契约，未发布）：沿用 `knowbot-test-run/v1`。动态清单的用例期望
+`artifact` 填作者 `planning.final_units` 的方法别名；不能填实例 ID 或内部 Artifact 名。
+运行方按已接受计划及验收收据映射到确切成果，复用原 equals/approx/contains 判据。
+提供方在建测试、签数据授权之前拒绝不匹配期望，运行方也校验；不是自动改作者断言。
+
+仅 case-outputs schema 增加可选 `plan_version`、`final_outputs` 和步骤 `current`：
+每份最终成果包含 method_id、instance_id、已验 result（id/version/digest，可为 null）、
+受大小限制的 artifact、可选 deliverable 与 note。引用为 null 时不能带成果或文件。
+结果摘要对应已验 JSON，不是回执中文件文字的指纹。没有当前有效成果时显式留空；
+`current=false` 的历史 accepted 不能作为本次有效成果。总量超限可省内容但保留全部引用。
+旧固定专家不序列化新字段；请求、结果、回答 schema 字节不变，消费锁只更新产出摘要。
+作者测试页面应展示全部 final_outputs，兼容旧单文件，不能仅渲染 deliverable 判定无产出。
+该接口扩展不解除 v3 外部准入门；作者页面和真实沙箱仍须联调验收。
