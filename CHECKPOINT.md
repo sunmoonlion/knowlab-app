@@ -11,3 +11,14 @@ feat/dynamic-methods 已完成第一单元作者/运行契约，后端 dad9b0e20
 验证：`uv run --locked pytest -q tests/test_knowbot_workdraft_compile.py tests/test_knowbot_contract_locks.py tests/test_knowbot_incubation_contract.py tests/test_knowbot_test_run_contract.py`，71 passed；相关文件 ruff 通过；锁中已有运行依赖版本不变。输出 /tmp/luna-dynamic-contract-gates-lab-final.txt；初次失败保留于 /tmp/luna-dynamic-contract-gates-lab.txt。不是全仓/生产镜像/业务验收。
 
 不改 qwen 正在发布的 fix/supply-delivery 候选；本分支未发布，不更新部署源，不调用 Wind。
+
+
+## 2026-11-02 WP-10 单元 1a 第一段：作者方法主档
+
+后端钉 422116eccd84a1d1ade34b1711378fc3c6a01d19，已推 GitHub feat/dynamic-methods。父仓新增 contracts/author-method/v1/definition.schema.json（后端 MethodDefinition 生成）与 README；不改既有运行清单或消费者锁，因为尚未接引用交付。
+
+作者方法身份/版本独立保存，冻结需既有工作稿作者出处与编译核验；结构输入槽不再是来源专家别名。正常 web 身份/CSRF 下可冻结、精确读版、列自己的方法、做引用预览；未接页面。版本数据库不可变、同确认幂等、异载荷冲突、升版连续，旧版不被新工作稿覆盖。预览只验证目标工作稿的输入/上限/图，不保存引用或发布专家，不得用复制 step 代替后续引用工程。
+
+迁移头 20261102_0025，前版 20261101_0024；空库退/升测试通过，非空方法历史阻止破坏性 downgrade，回退应用保留 schema。全量 760 passed / 5 skipped，新增故障案例后最终相关四文件 32 passed；整个 knowlab 后端 ruff/pyright 已通过，旧静态债务已清（CategoryCode 枚举及 schema 与原版完全一致）。详细证据见后端 CHECKPOINT.md。
+
+下一段保存专家精确引用、选择/升级确认、编译版本与快照核验，并同步 knowmart/knowbench 契约/锁。当前只完成主档与预览，不能声称跨专家运行验收完成。发版仍由 qwen 使用现有 Jenkins，本段无发布、无线上改动、无 Wind 调用。
