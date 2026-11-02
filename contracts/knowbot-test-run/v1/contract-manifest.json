@@ -4,7 +4,7 @@
   "schemas": {
     "test-run-answers.schema.json": "31b23135b2c8d608ca0f32c2d36cccf2353d0ab99c04e572fc739e33101214f2",
     "test-run-case-outputs.schema.json": "d36d9ade7a030b5b76a7344112e88d1a12ef1275eb406c10e1a3f12ac17203eb",
-    "test-run-request.schema.json": "766ddd86b004568c7b415a7b1dba51d713b1be5ecdb4fee5e4b29bccb8b74207",
+    "test-run-request.schema.json": "800592edc6819563b04fbdeecca5634220f865403e4c77e614083aa73bb5437a",
     "test-run-result.schema.json": "8ffb7eb6d24bb6252a5a1cfb7243d798afa46cea9846840726e9d1f198701a2a"
   }
 }
