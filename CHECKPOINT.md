@@ -62,3 +62,12 @@ feat/dynamic-methods 已完成第一单元作者/运行契约，后端 dad9b0e20
 检查。前端只对齐真实合成夹具，无产品 UI 变化。后端全量 807 passed / 5 skipped，
 前端 182 passed / 2 skipped；两端静态检查通过，详见子仓 CHECKPOINT。
 开发分支未发布，不改契约版本/迁移/生产采单，不把 agy 财务夹具作为生产资产。
+
+
+## 2026-11-02：kimi 方法库修复集成
+
+后端 27286e5、前端 72db347 已推送 GitHub fix/kimi-method-validation。
+合入 Luna a0b71b8，保留 Wind consumer 契约，不回退既有开发。
+同步 knowbench 通用数值/行验收扩展 v1/v2 consumer 锁；54 项合成运行正反例，
+作者侧回归 110 passed/1 skipped，隔离 DB 15 passed，前端 183 passed/2 skipped。
+本批只是工程修复与候选测试资产；不宣称生产方法库导入或实战验收完成。
