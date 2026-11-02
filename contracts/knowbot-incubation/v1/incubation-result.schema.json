@@ -132,7 +132,7 @@
       "description": "出处表的一行（第 8.2、9.1 节）：建议里的一格出自哪里。\n\nidea：创意里逐字的一句（quote，knowlab 核它逐字出现在这一版创意里）；\nanswer：某个答过的缺口（ref 是它的 id）；proposal：AI 的提议，作者接受时页面\n照实标「这是 AI 的提议」。",
       "properties": {
         "path": {
-          "pattern": "^(name|tagline|scope|scope/(does|does_not|elsewhere)|steps/[A-Za-z][A-Za-z0-9_-]{0,47}(/(title|does|why|uses|rules|ask_before|outputs|checks|on_fail))?|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/rules/[A-Za-z0-9_-]{1,32}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/ask_before/[A-Za-z0-9_-]{1,32}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/outputs/[^\\s./\\\\\\\"'（）()、，,；;：:]{1,64}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/checks/[0-9]{1,2})$",
+          "pattern": "^(name|tagline|planning|scope|scope/(does|does_not|elsewhere)|steps/[A-Za-z][A-Za-z0-9_-]{0,47}(/(title|does|why|uses|rules|ask_before|outputs|checks|on_fail|selection))?|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/rules/[A-Za-z0-9_-]{1,32}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/ask_before/[A-Za-z0-9_-]{1,32}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/outputs/[^\\s./\\\\\\\"'（）()、，,；;：:]{1,64}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/checks/[0-9]{1,2})$",
           "title": "Path",
           "type": "string"
         },
@@ -190,7 +190,7 @@
           "type": "string"
         },
         "path": {
-          "pattern": "^(name|tagline|scope|scope/(does|does_not|elsewhere)|steps/[A-Za-z][A-Za-z0-9_-]{0,47}(/(title|does|why|uses|rules|ask_before|outputs|checks|on_fail))?|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/rules/[A-Za-z0-9_-]{1,32}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/ask_before/[A-Za-z0-9_-]{1,32}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/outputs/[^\\s./\\\\\\\"'（）()、，,；;：:]{1,64}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/checks/[0-9]{1,2})$",
+          "pattern": "^(name|tagline|planning|scope|scope/(does|does_not|elsewhere)|steps/[A-Za-z][A-Za-z0-9_-]{0,47}(/(title|does|why|uses|rules|ask_before|outputs|checks|on_fail|selection))?|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/rules/[A-Za-z0-9_-]{1,32}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/ask_before/[A-Za-z0-9_-]{1,32}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/outputs/[^\\s./\\\\\\\"'（）()、，,；;：:]{1,64}|steps/[A-Za-z][A-Za-z0-9_-]{0,47}/checks/[0-9]{1,2})$",
           "title": "Path",
           "type": "string"
         },

@@ -550,6 +550,35 @@
       "title": "LatestTestStep",
       "type": "object"
     },
+    "MethodSelection": {
+      "additionalProperties": false,
+      "description": "作者确认的适用条件、必经与重复上限；不是任务模型新造的方法。",
+      "properties": {
+        "applies_when": {
+          "maxLength": 4000,
+          "minLength": 1,
+          "title": "Applies When",
+          "type": "string"
+        },
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        },
+        "max_calls": {
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Max Calls",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "applies_when",
+        "required",
+        "max_calls"
+      ],
+      "title": "MethodSelection",
+      "type": "object"
+    },
     "OnFail": {
       "additionalProperties": false,
       "description": "没过怎么办：默认重做一次，再不过停下来问；可以改成退回前面某一步，或直接问。",
@@ -647,6 +676,60 @@
         "name"
       ],
       "title": "OutputField",
+      "type": "object"
+    },
+    "PlanningCell": {
+      "additionalProperties": false,
+      "description": "显式选用动态方法；整格进入作者出处链。与运行方 PlanningContract 同约束。",
+      "properties": {
+        "method_text": {
+          "maxLength": 20000,
+          "minLength": 1,
+          "title": "Method Text",
+          "type": "string"
+        },
+        "final_units": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "minItems": 1,
+          "title": "Final Units",
+          "type": "array"
+        },
+        "max_steps": {
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Max Steps",
+          "type": "integer"
+        },
+        "max_replans": {
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Max Replans",
+          "type": "integer"
+        },
+        "reserve": {
+          "pattern": "^[0-9]{1,4}(\\.[0-9]{1,4})?$",
+          "title": "Reserve",
+          "type": "string"
+        },
+        "input_max_chars": {
+          "maximum": 200000,
+          "minimum": 500,
+          "title": "Input Max Chars",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "method_text",
+        "final_units",
+        "max_steps",
+        "max_replans",
+        "reserve",
+        "input_max_chars"
+      ],
+      "title": "PlanningCell",
       "type": "object"
     },
     "RuleCell": {
@@ -838,6 +921,17 @@
             "output_schema": null,
             "output_file": null
           }
+        },
+        "selection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MethodSelection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "required": [
@@ -948,6 +1042,17 @@
           "maxItems": 30,
           "title": "Steps",
           "type": "array"
+        },
+        "planning": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PlanningCell"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "title": "WorkdraftBody",
