@@ -43,3 +43,16 @@ L4 格式接入（2026-11-02 后续增量，未部署）：`knowbase-user-data-l
 投影进既有 `DataFormat.tables`。CSV/XLSX 支持第一行/第一列标签，数据区数值与公式
 不传；PDF、旧 xls、正文无表轴。坏文件/撤回展示/契约不符不能降级为空。
 提供方先部署；`knowbot-incubation/v1` 只更新说明，消费锁摘要随之更新。
+
+2026-11-03 独立方法定义 v3（开发候选）：`author-method/v3/definition.schema.json`
+由后端 `app.domain.knowbots.atomic_methods.render` 生成。正文无 StepCell；输入字段、
+含义和必需性归方法，问询/失败处理/工具/预算/文件归专家引用 execution。
+冻结接口显式 `definition_contract=knowlab/method-definition/v3`，输入字段由作者选择，
+适用条件可来自已接受来源或本次明确填写。固定工作稿也可提取；新引用仅支持能力规划。
+旧方法版本不改写。绑定时解析执行默认值并完整冻结到引用，后续默认值变化不改旧引用。
+工作稿/孵化请求可选 execution 与消费锁同步；运行目录沿 dynamic-methods/v3，
+只增加新来源格式，旧目录/旧引用精确重编译不变。无数据库迁移、无第二运行器。
+
+本次方法需求传递另用 runtime-incubation/v2；它是未接受参考，不能直接变成规则。
+两种 v3 名称不同：author-method/v3 是作者定义，dynamic-methods/v3 是现有运行目录。
+保存版本不是成熟库准入；多槽字段路径绑定和语义数据要求仍待后续实现。

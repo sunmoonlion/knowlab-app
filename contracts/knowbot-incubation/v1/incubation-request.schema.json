@@ -707,6 +707,40 @@
       "title": "LatestTestStep",
       "type": "object"
     },
+    "MethodExecution": {
+      "additionalProperties": false,
+      "description": "Expert-owned execution policy; not part of an atomic method's meaning.",
+      "properties": {
+        "ask_before": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/AskBeforeCell"
+          },
+          "maxItems": 10,
+          "title": "Ask Before",
+          "type": "array"
+        },
+        "on_fail": {
+          "$ref": "#/$defs/OnFail",
+          "default": {
+            "kind": "rework",
+            "back_to": null
+          }
+        },
+        "advanced": {
+          "$ref": "#/$defs/Advanced",
+          "default": {
+            "tools": null,
+            "reserve": null,
+            "input_max_chars": null,
+            "output_schema": null,
+            "output_file": null
+          }
+        }
+      },
+      "title": "MethodExecution",
+      "type": "object"
+    },
     "MethodReference": {
       "additionalProperties": false,
       "properties": {
@@ -733,6 +767,17 @@
           "maxProperties": 30,
           "title": "Inputs",
           "type": "object"
+        },
+        "execution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MethodExecution"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "required": [

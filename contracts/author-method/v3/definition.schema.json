@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/author-method/v3/definition.schema.json",
+  "$defs": {
+    "CheckCell": {
+      "additionalProperties": false,
+      "description": "怎样算对：选一个验收模板，再填参数（参数在 compile 时逐个核）。",
+      "properties": {
+        "template": {
+          "enum": [
+            "required",
+            "non_empty",
+            "list_min",
+            "list_empty",
+            "blank",
+            "each_has",
+            "all_equal",
+            "computed",
+            "identity",
+            "sourced",
+            "quoted",
+            "covers",
+            "max_chars"
+          ],
+          "title": "Template",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        }
+      },
+      "required": [
+        "template"
+      ],
+      "title": "CheckCell",
+      "type": "object"
+    },
+    "ConditionalCheckCell": {
+      "additionalProperties": false,
+      "properties": {
+        "template": {
+          "enum": [
+            "required",
+            "non_empty",
+            "list_min",
+            "list_empty",
+            "blank",
+            "each_has",
+            "all_equal",
+            "computed",
+            "identity",
+            "sourced",
+            "quoted",
+            "covers",
+            "max_chars"
+          ],
+          "title": "Template",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        },
+        "when_input_present": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+          "title": "When Input Present",
+          "type": "string"
+        }
+      },
+      "required": [
+        "template",
+        "when_input_present"
+      ],
+      "title": "ConditionalCheckCell",
+      "type": "object"
+    },
+    "MethodInput": {
+      "additionalProperties": false,
+      "description": "A method consumes an explicitly declared shape, not an upstream workflow.",
+      "properties": {
+        "schema": {
+          "additionalProperties": true,
+          "minProperties": 1,
+          "title": "Schema",
+          "type": "object"
+        },
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        },
+        "description": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema",
+        "required",
+        "description"
+      ],
+      "title": "MethodInput",
+      "type": "object"
+    },
+    "OutputCell": {
+      "additionalProperties": false,
+      "description": "交回哪几项：名字、类型（数、表、文字、列表）；列表与表再列每项有哪几项。",
+      "properties": {
+        "name": {
+          "pattern": "^[^\\s./\\\\\\\"'（）()、，,；;：:]{1,64}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "number",
+            "table",
+            "text",
+            "list"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "items": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/OutputField"
+              },
+              "maxItems": 30,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Items"
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ],
+      "title": "OutputCell",
+      "type": "object"
+    },
+    "OutputField": {
+      "additionalProperties": false,
+      "description": "列表、表的每项有哪几项。",
+      "properties": {
+        "name": {
+          "pattern": "^[^\\s./\\\\\\\"'（）()、，,；;：:]{1,64}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "default": "text",
+          "enum": [
+            "number",
+            "text"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "OutputField",
+      "type": "object"
+    },
+    "RuleCell": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9_-]{1,32}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "text": {
+          "default": "",
+          "maxLength": 4000,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "RuleCell",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "knowlab/method-definition/v3",
+      "title": "Schema",
+      "type": "string"
+    },
+    "title": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "purpose": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Purpose",
+      "type": "string"
+    },
+    "procedure": {
+      "maxLength": 20000,
+      "minLength": 1,
+      "title": "Procedure",
+      "type": "string"
+    },
+    "applies_when": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "title": "Applies When",
+      "type": "string"
+    },
+    "inputs": {
+      "maxProperties": 30,
+      "patternProperties": {
+        "^[A-Za-z][A-Za-z0-9_-]{0,47}$": {
+          "$ref": "#/$defs/MethodInput"
+        }
+      },
+      "title": "Inputs",
+      "type": "object"
+    },
+    "rules": {
+      "items": {
+        "$ref": "#/$defs/RuleCell"
+      },
+      "maxItems": 50,
+      "title": "Rules",
+      "type": "array"
+    },
+    "outputs": {
+      "items": {
+        "$ref": "#/$defs/OutputCell"
+      },
+      "maxItems": 30,
+      "minItems": 1,
+      "title": "Outputs",
+      "type": "array"
+    },
+    "output_schema": {
+      "additionalProperties": true,
+      "minProperties": 1,
+      "title": "Output Schema",
+      "type": "object"
+    },
+    "checks": {
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/CheckCell"
+          },
+          {
+            "$ref": "#/$defs/ConditionalCheckCell"
+          }
+        ]
+      },
+      "maxItems": 50,
+      "title": "Checks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "title",
+    "purpose",
+    "procedure",
+    "applies_when",
+    "inputs",
+    "rules",
+    "outputs",
+    "output_schema",
+    "checks"
+  ],
+  "title": "AtomicMethodDefinition",
+  "type": "object"
+}
