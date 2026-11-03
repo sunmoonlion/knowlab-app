@@ -1,0 +1,7 @@
+{
+  "provider": "knowbench-app",
+  "contract": "dynamic-methods",
+  "major_version": 3,
+  "schema": "contracts/dynamic-methods/v3/catalog.schema.json",
+  "sha256": "1e344b79dc4459fb5e4faad1bf3c41d091f8ee88309c1cbc4e85922384e19a6e"
+}

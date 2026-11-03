@@ -1,0 +1,491 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/author-method/v2/definition.schema.json",
+  "$defs": {
+    "Advanced": {
+      "additionalProperties": false,
+      "description": "工程层（第 7.2 节「高级」）：不填就用程序生成的。",
+      "properties": {
+        "tools": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 30,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tools"
+        },
+        "reserve": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9]{1,4}(\\.[0-9]{1,4})?$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reserve"
+        },
+        "input_max_chars": {
+          "anyOf": [
+            {
+              "maximum": 200000,
+              "minimum": 500,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Input Max Chars"
+        },
+        "output_schema": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output Schema"
+        },
+        "output_file": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output File"
+        }
+      },
+      "title": "Advanced",
+      "type": "object"
+    },
+    "AskBeforeCell": {
+      "additionalProperties": false,
+      "description": "开步前问用户什么：问题，可以给几个选项（选项是给用户看的字）。",
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9_-]{1,32}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "question": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Question",
+          "type": "string"
+        },
+        "options": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Options",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "AskBeforeCell",
+      "type": "object"
+    },
+    "CheckCell": {
+      "additionalProperties": false,
+      "description": "怎样算对：选一个验收模板，再填参数（参数在 compile 时逐个核）。",
+      "properties": {
+        "template": {
+          "enum": [
+            "required",
+            "non_empty",
+            "list_min",
+            "list_empty",
+            "blank",
+            "each_has",
+            "all_equal",
+            "computed",
+            "identity",
+            "sourced",
+            "quoted",
+            "covers",
+            "max_chars"
+          ],
+          "title": "Template",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        }
+      },
+      "required": [
+        "template"
+      ],
+      "title": "CheckCell",
+      "type": "object"
+    },
+    "ConditionalCheckCell": {
+      "additionalProperties": false,
+      "properties": {
+        "template": {
+          "enum": [
+            "required",
+            "non_empty",
+            "list_min",
+            "list_empty",
+            "blank",
+            "each_has",
+            "all_equal",
+            "computed",
+            "identity",
+            "sourced",
+            "quoted",
+            "covers",
+            "max_chars"
+          ],
+          "title": "Template",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        },
+        "when_input_present": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+          "title": "When Input Present",
+          "type": "string"
+        }
+      },
+      "required": [
+        "template",
+        "when_input_present"
+      ],
+      "title": "ConditionalCheckCell",
+      "type": "object"
+    },
+    "ConditionalStepCell": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "default": "",
+          "maxLength": 80,
+          "title": "Title",
+          "type": "string"
+        },
+        "does": {
+          "default": "",
+          "maxLength": 20000,
+          "title": "Does",
+          "type": "string"
+        },
+        "why": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Why",
+          "type": "string"
+        },
+        "uses": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Uses",
+          "type": "array"
+        },
+        "rules": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RuleCell"
+          },
+          "maxItems": 50,
+          "title": "Rules",
+          "type": "array"
+        },
+        "ask_before": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/AskBeforeCell"
+          },
+          "maxItems": 10,
+          "title": "Ask Before",
+          "type": "array"
+        },
+        "outputs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/OutputCell"
+          },
+          "maxItems": 30,
+          "title": "Outputs",
+          "type": "array"
+        },
+        "checks": {
+          "default": [],
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/CheckCell"
+              },
+              {
+                "$ref": "#/$defs/ConditionalCheckCell"
+              }
+            ]
+          },
+          "maxItems": 50,
+          "title": "Checks",
+          "type": "array"
+        },
+        "on_fail": {
+          "$ref": "#/$defs/OnFail",
+          "default": {
+            "kind": "rework",
+            "back_to": null
+          }
+        },
+        "advanced": {
+          "$ref": "#/$defs/Advanced",
+          "default": {
+            "tools": null,
+            "reserve": null,
+            "input_max_chars": null,
+            "output_schema": null,
+            "output_file": null
+          }
+        },
+        "selection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MethodSelection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "ConditionalStepCell",
+      "type": "object"
+    },
+    "MethodSelection": {
+      "additionalProperties": false,
+      "description": "作者确认的适用条件、必经与重复上限；不是任务模型新造的方法。",
+      "properties": {
+        "applies_when": {
+          "maxLength": 4000,
+          "minLength": 1,
+          "title": "Applies When",
+          "type": "string"
+        },
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        },
+        "max_calls": {
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Max Calls",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "applies_when",
+        "required",
+        "max_calls"
+      ],
+      "title": "MethodSelection",
+      "type": "object"
+    },
+    "OnFail": {
+      "additionalProperties": false,
+      "description": "没过怎么办：默认重做一次，再不过停下来问；可以改成退回前面某一步，或直接问。",
+      "properties": {
+        "kind": {
+          "default": "rework",
+          "enum": [
+            "rework",
+            "back",
+            "ask"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "back_to": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Back To"
+        }
+      },
+      "title": "OnFail",
+      "type": "object"
+    },
+    "OutputCell": {
+      "additionalProperties": false,
+      "description": "交回哪几项：名字、类型（数、表、文字、列表）；列表与表再列每项有哪几项。",
+      "properties": {
+        "name": {
+          "pattern": "^[^\\s./\\\\\\\"'（）()、，,；;：:]{1,64}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "number",
+            "table",
+            "text",
+            "list"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "items": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/OutputField"
+              },
+              "maxItems": 30,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Items"
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ],
+      "title": "OutputCell",
+      "type": "object"
+    },
+    "OutputField": {
+      "additionalProperties": false,
+      "description": "列表、表的每项有哪几项。",
+      "properties": {
+        "name": {
+          "pattern": "^[^\\s./\\\\\\\"'（）()、，,；;：:]{1,64}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "default": "text",
+          "enum": [
+            "number",
+            "text"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "OutputField",
+      "type": "object"
+    },
+    "RuleCell": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9_-]{1,32}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "text": {
+          "default": "",
+          "maxLength": 4000,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "RuleCell",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "knowlab/method-definition/v2",
+      "title": "Schema",
+      "type": "string"
+    },
+    "step": {
+      "$ref": "#/$defs/ConditionalStepCell"
+    },
+    "input_schemas": {
+      "maxProperties": 30,
+      "patternProperties": {
+        "^[A-Za-z][A-Za-z0-9_-]{0,47}$": {
+          "additionalProperties": true,
+          "type": "object"
+        }
+      },
+      "title": "Input Schemas",
+      "type": "object"
+    },
+    "input_required": {
+      "maxProperties": 30,
+      "patternProperties": {
+        "^[A-Za-z][A-Za-z0-9_-]{0,47}$": {
+          "type": "boolean"
+        }
+      },
+      "title": "Input Required",
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema",
+    "step",
+    "input_schemas",
+    "input_required"
+  ],
+  "title": "MethodDefinitionV2",
+  "type": "object"
+}
