@@ -56,3 +56,10 @@ L4 格式接入（2026-11-02 后续增量，未部署）：`knowbase-user-data-l
 本次方法需求传递另用 runtime-incubation/v2；它是未接受参考，不能直接变成规则。
 两种 v3 名称不同：author-method/v3 是作者定义，dynamic-methods/v3 是现有运行目录。
 保存版本不是成熟库准入；多槽字段路径绑定和语义数据要求仍待后续实现。
+
+2026-11-04 创意模板（开发未发布）：网页Idea与后端drafts.Idea新增可选
+`template_sources: [{method_id, version, digest}]`。它是模板素材出处，不是
+`method_refs`执行绑定。保存/修订核本人版本与摘要；用户加工后正文才是孵化输入，
+不从来源自动还原/覆盖正文。每版最多30项，重复同版拒绝；旧Idea仍可读取。
+孵化请求seed为既有JSON边界，生成schema字节未变，不改提供方摘要锁。
+前后端须成组发布；老后端拒绝新字段，不能先单独发布网页入口。
