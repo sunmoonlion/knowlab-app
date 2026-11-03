@@ -152,3 +152,7 @@ knowbench 消费锁同批。作者挑选版本时核摘要与格式，保存快�
 ## 2026-11-03 Kimi 探针整合与孵化契约补生成
 
 合入后端0652806的14方法合成正反例并补防覆盖/漏测断言；保持Luna当前前端/admin指针。当前模型重新生成knowbot-incubation/v1请求schema及manifest，请求SHA256=1a8723318e255021a7800cf3048f8e937c61e1efc316a0abe5026f6f34304f0b，与Kimi92f075c产物一致，未整体导入其旧父仓gitlink。提供方30项、运行方5项相关测试通过，99标记全真；仅为工程回归，不宣称20方法已财务验收或已上架。
+
+## 2026-11-03 人工特批发布能力
+
+所有者明确选择修复后特批、不再模型复测。配套 knowlab backend/web/admin 一起晋级：迁移0026、作者确切修订申请、发布角色审批、未复测披露、仍走正常交付/许可审核。后端900 passed/5 skipped，web211 passed/2 skipped，admin71 passed；两前端typecheck/i18n/生产build及定向ESLint通过，后端Ruff/Pyright通过。准专家3.9已用现有正式应用服务生成，旧第2版不覆盖，实际未启动新测试、未上架。正式回执与上线步骤见sunmoonun统一交接第19节；Qwen发布后才可使用新特批接口。
