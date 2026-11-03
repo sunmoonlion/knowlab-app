@@ -1,3 +1,7 @@
+# 2026-11-03 test10作者自测时限候选
+
+前端4669c4a，基线af091be；仅web新镜像，backend/admin不变。现有SelfTest.timeout_seconds字段支持整轮1～1440分钟设置，默认按冻结准专家对应创意题数估算60分钟/题；不改变均分预算、旧轮时限或旧结果。配套knowbench后端64aacf3；Qwen/Jenkins发布。候选196 passed/2 skipped，类型、eslint、i18n956keys及Next生产构建通过；工作稿AI测试既有mock空query警告不代表失败。
+
 # 2026-11-02 第二轨 Wind 通用查询与年报证据候选
 
 基线 `cea4e7c562400a5352b8ee9a445ab6fd86b2648e`，子仓先推 GitHub，再钉本仓。
