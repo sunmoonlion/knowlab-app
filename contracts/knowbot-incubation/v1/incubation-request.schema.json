@@ -167,6 +167,123 @@
       "title": "Budget",
       "type": "object"
     },
+    "CapabilityBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "required_units": {
+          "items": {
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+            "type": "string"
+          },
+          "maxItems": 30,
+          "minItems": 1,
+          "title": "Required Units",
+          "type": "array"
+        },
+        "evidence_outputs": {
+          "items": {
+            "$ref": "#/$defs/CapabilityOutput"
+          },
+          "maxItems": 30,
+          "minItems": 1,
+          "title": "Evidence Outputs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "required_units",
+        "evidence_outputs"
+      ],
+      "title": "CapabilityBinding",
+      "type": "object"
+    },
+    "CapabilityOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+          "title": "Method",
+          "type": "string"
+        },
+        "field": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Field",
+          "type": "string"
+        }
+      },
+      "required": [
+        "method",
+        "field"
+      ],
+      "title": "CapabilityOutput",
+      "type": "object"
+    },
+    "CapabilityPlanningCell": {
+      "additionalProperties": false,
+      "properties": {
+        "method_text": {
+          "maxLength": 20000,
+          "minLength": 1,
+          "title": "Method Text",
+          "type": "string"
+        },
+        "final_units": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "minItems": 1,
+          "title": "Final Units",
+          "type": "array"
+        },
+        "max_steps": {
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Max Steps",
+          "type": "integer"
+        },
+        "max_replans": {
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Max Replans",
+          "type": "integer"
+        },
+        "reserve": {
+          "pattern": "^[0-9]{1,4}(\\.[0-9]{1,4})?$",
+          "title": "Reserve",
+          "type": "string"
+        },
+        "input_max_chars": {
+          "maximum": 200000,
+          "minimum": 500,
+          "title": "Input Max Chars",
+          "type": "integer"
+        },
+        "capability_bindings": {
+          "maxProperties": 30,
+          "minProperties": 1,
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,47}$": {
+              "$ref": "#/$defs/CapabilityBinding"
+            }
+          },
+          "title": "Capability Bindings",
+          "type": "object"
+        }
+      },
+      "required": [
+        "method_text",
+        "final_units",
+        "max_steps",
+        "max_replans",
+        "reserve",
+        "input_max_chars",
+        "capability_bindings"
+      ],
+      "title": "CapabilityPlanningCell",
+      "type": "object"
+    },
     "CellSource": {
       "additionalProperties": false,
       "description": "工作稿一格的出处（第 9.1 节）：作者写的 user_text，接受或答过的\nuser_confirmed；ref 指编辑记录、接受记录或答过的问题。模型凭它认出哪些格子是\n作者的，只能提修改建议。",
@@ -226,6 +343,46 @@
         "template"
       ],
       "title": "CheckCell",
+      "type": "object"
+    },
+    "ConditionalCheckCell": {
+      "additionalProperties": false,
+      "properties": {
+        "template": {
+          "enum": [
+            "required",
+            "non_empty",
+            "list_min",
+            "list_empty",
+            "blank",
+            "each_has",
+            "all_equal",
+            "computed",
+            "identity",
+            "sourced",
+            "quoted",
+            "covers",
+            "max_chars"
+          ],
+          "title": "Template",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        },
+        "when_input_present": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+          "title": "When Input Present",
+          "type": "string"
+        }
+      },
+      "required": [
+        "template",
+        "when_input_present"
+      ],
+      "title": "ConditionalCheckCell",
       "type": "object"
     },
     "DataDescription": {
@@ -646,6 +803,130 @@
       "title": "OnFail",
       "type": "object"
     },
+    "OptionalStepCell": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "default": "",
+          "maxLength": 80,
+          "title": "Title",
+          "type": "string"
+        },
+        "does": {
+          "default": "",
+          "maxLength": 20000,
+          "title": "Does",
+          "type": "string"
+        },
+        "why": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Why",
+          "type": "string"
+        },
+        "uses": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Uses",
+          "type": "array"
+        },
+        "rules": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RuleCell"
+          },
+          "maxItems": 50,
+          "title": "Rules",
+          "type": "array"
+        },
+        "ask_before": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/AskBeforeCell"
+          },
+          "maxItems": 10,
+          "title": "Ask Before",
+          "type": "array"
+        },
+        "outputs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/OutputCell"
+          },
+          "maxItems": 30,
+          "title": "Outputs",
+          "type": "array"
+        },
+        "checks": {
+          "default": [],
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/CheckCell"
+              },
+              {
+                "$ref": "#/$defs/ConditionalCheckCell"
+              }
+            ]
+          },
+          "maxItems": 50,
+          "title": "Checks",
+          "type": "array"
+        },
+        "on_fail": {
+          "$ref": "#/$defs/OnFail",
+          "default": {
+            "kind": "rework",
+            "back_to": null
+          }
+        },
+        "advanced": {
+          "$ref": "#/$defs/Advanced",
+          "default": {
+            "tools": null,
+            "reserve": null,
+            "input_max_chars": null,
+            "output_schema": null,
+            "output_file": null
+          }
+        },
+        "selection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MethodSelection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "input_required": {
+          "maxProperties": 30,
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,47}$": {
+              "type": "boolean"
+            }
+          },
+          "title": "Input Required",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "input_required"
+      ],
+      "title": "OptionalStepCell",
+      "type": "object"
+    },
     "OutputCell": {
       "additionalProperties": false,
       "description": "交回哪几项：名字、类型（数、表、文字、列表）；列表与表再列每项有哪几项。",
@@ -766,6 +1047,62 @@
         "input_max_chars"
       ],
       "title": "PlanningCell",
+      "type": "object"
+    },
+    "PublicCapability": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "statement": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        },
+        "conditions": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Conditions",
+          "type": "array"
+        },
+        "exclusions": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Exclusions",
+          "type": "array"
+        },
+        "delivers": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "minItems": 1,
+          "title": "Delivers",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "statement",
+        "conditions",
+        "exclusions",
+        "delivers"
+      ],
+      "title": "PublicCapability",
       "type": "object"
     },
     "RuleCell": {
@@ -1073,7 +1410,14 @@
         "steps": {
           "default": [],
           "items": {
-            "$ref": "#/$defs/StepCell"
+            "anyOf": [
+              {
+                "$ref": "#/$defs/StepCell"
+              },
+              {
+                "$ref": "#/$defs/OptionalStepCell"
+              }
+            ]
           },
           "maxItems": 30,
           "title": "Steps",
@@ -1085,10 +1429,31 @@
               "$ref": "#/$defs/PlanningCell"
             },
             {
+              "$ref": "#/$defs/CapabilityPlanningCell"
+            },
+            {
               "type": "null"
             }
           ],
-          "default": null
+          "default": null,
+          "title": "Planning"
+        },
+        "public_capabilities": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/PublicCapability"
+              },
+              "maxItems": 30,
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Public Capabilities"
         },
         "method_refs": {
           "anyOf": [
