@@ -156,3 +156,15 @@ knowbench 消费锁同批。作者挑选版本时核摘要与格式，保存快�
 ## 2026-11-03 人工特批发布能力
 
 所有者明确选择修复后特批、不再模型复测。配套 knowlab backend/web/admin 一起晋级：迁移0026、作者确切修订申请、发布角色审批、未复测披露、仍走正常交付/许可审核。后端900 passed/5 skipped，web211 passed/2 skipped，admin71 passed；两前端typecheck/i18n/生产build及定向ESLint通过，后端Ruff/Pyright通过。准专家3.9已用现有正式应用服务生成，旧第2版不覆盖，实际未启动新测试、未上架。正式回执与上线步骤见sunmoonun统一交接第19节；Qwen发布后才可使用新特批接口。
+
+## 2026-11-03 方法供需主线：需求转孵化 v2
+
+接收 knowbench expert-match/v3 的方法需求、AI 备选建议、覆盖缺口及原题修订号，
+写入申请来源并作为未接受参考交给既有孵化 AI。原题仍是创意，不自动生成已接受规则。
+同键重发需内容摘要一致；非法引用/非原题引文/超过参考通道容量拒绝，不截断。
+作者申请与名称详情可见上下文；旧 runtime-incubation 请求继续支持。
+provider：contracts/runtime-incubation/v2/request.schema.json；后端75f1d5d，web308ceaa。
+验证：后端全量909 passed/5 skipped（隔离PostgreSQL），ruff/pyright通过；
+web213 passed/2 skipped，类型、lint、i18n、生产构建通过。非真实模型/线上验收。
+本批不改变方法定义、成熟库准入或现存专家版本；下一批处理方法/组合/流程/数据解耦。
+Qwen已钉候选不变，本提交只供后续整合，未发起付费测试或业务发布。

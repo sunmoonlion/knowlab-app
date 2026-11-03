@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/runtime-incubation/v2/request.schema.json",
+  "$defs": {
+    "DemandGap": {
+      "additionalProperties": false,
+      "properties": {
+        "requirement_id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+          "title": "Requirement Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "uncovered",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "requirement_id",
+        "status",
+        "reason"
+      ],
+      "title": "DemandGap",
+      "type": "object"
+    },
+    "DemandProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "requirement_ids": {
+          "items": {
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+            "type": "string"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "title": "Requirement Ids",
+          "type": "array"
+        },
+        "approach": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Approach",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "data_requirements": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Data Requirements",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "requirement_ids",
+        "approach",
+        "reason",
+        "data_requirements"
+      ],
+      "title": "DemandProposal",
+      "type": "object"
+    },
+    "DemandRequirement": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "result",
+            "constraint",
+            "explicit_method"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "statement": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        },
+        "question_quote": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Question Quote",
+          "type": "string"
+        },
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        },
+        "origin": {
+          "enum": [
+            "user_explicit",
+            "goal_inferred"
+          ],
+          "title": "Origin",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "statement",
+        "question_quote",
+        "required",
+        "origin",
+        "rationale"
+      ],
+      "title": "DemandRequirement",
+      "type": "object"
+    },
+    "MethodDemand": {
+      "additionalProperties": false,
+      "properties": {
+        "match_artifact_version": {
+          "minimum": 1,
+          "title": "Match Artifact Version",
+          "type": "integer"
+        },
+        "question_revision": {
+          "minimum": 1,
+          "title": "Question Revision",
+          "type": "integer"
+        },
+        "outcome": {
+          "enum": [
+            "none",
+            "clarify"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "requirements": {
+          "items": {
+            "$ref": "#/$defs/DemandRequirement"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "title": "Requirements",
+          "type": "array"
+        },
+        "method_proposals": {
+          "items": {
+            "$ref": "#/$defs/DemandProposal"
+          },
+          "maxItems": 30,
+          "title": "Method Proposals",
+          "type": "array"
+        },
+        "gaps": {
+          "items": {
+            "$ref": "#/$defs/DemandGap"
+          },
+          "maxItems": 300,
+          "title": "Gaps",
+          "type": "array"
+        },
+        "clarification": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Clarification"
+        }
+      },
+      "required": [
+        "match_artifact_version",
+        "question_revision",
+        "outcome",
+        "requirements",
+        "method_proposals",
+        "gaps",
+        "clarification"
+      ],
+      "title": "MethodDemand",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "owner_subject": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Owner Subject",
+      "type": "string"
+    },
+    "question": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Question",
+      "type": "string"
+    },
+    "project_id": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Project Id",
+      "type": "string"
+    },
+    "task_id": {
+      "anyOf": [
+        {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Task Id"
+    },
+    "key": {
+      "maxLength": 128,
+      "minLength": 8,
+      "title": "Key",
+      "type": "string"
+    },
+    "reference_answer": {
+      "anyOf": [
+        {
+          "maxLength": 20000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reference Answer"
+    },
+    "contract": {
+      "const": "knowlab/runtime-incubation/v2",
+      "title": "Contract",
+      "type": "string"
+    },
+    "method_demand": {
+      "$ref": "#/$defs/MethodDemand"
+    }
+  },
+  "required": [
+    "owner_subject",
+    "question",
+    "project_id",
+    "key",
+    "contract",
+    "method_demand"
+  ],
+  "title": "RuntimeIncubationV2",
+  "type": "object"
+}
