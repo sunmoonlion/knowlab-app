@@ -1,0 +1,653 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-test-execution/v1/execution.schema.json",
+  "$defs": {
+    "AcceptedOutputRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[0-9a-f-]{36}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "digest"
+      ],
+      "title": "AcceptedOutputRef",
+      "type": "object"
+    },
+    "CaseOutputsV1": {
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "const": "knowbot-test-run/v1",
+          "title": "Contract",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[A-Za-z0-9._:-]{8,128}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "case_id": {
+          "pattern": "^[A-Za-z0-9._-]{1,64}$",
+          "title": "Case Id",
+          "type": "string"
+        },
+        "deliverable": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Deliverable"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "deliverable_note": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Deliverable Note"
+        },
+        "steps": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/StepOutput"
+          },
+          "maxItems": 200,
+          "title": "Steps",
+          "type": "array"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "plan_version": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Plan Version"
+        },
+        "final_outputs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/FinalOutput"
+          },
+          "maxItems": 30,
+          "title": "Final Outputs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "contract",
+        "run_id",
+        "case_id"
+      ],
+      "title": "CaseOutputsV1",
+      "type": "object"
+    },
+    "Deliverable": {
+      "additionalProperties": false,
+      "description": "这条用例写稿那一步这次真写了的文件（项目内相对路径）与它的文字。",
+      "properties": {
+        "path": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 200000,
+          "title": "Text",
+          "type": "string"
+        },
+        "truncated": {
+          "default": false,
+          "title": "Truncated",
+          "type": "boolean"
+        },
+        "step_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Step Id"
+        }
+      },
+      "required": [
+        "path",
+        "text"
+      ],
+      "title": "Deliverable",
+      "type": "object"
+    },
+    "FinalOutput": {
+      "additionalProperties": false,
+      "description": "作者的最终方法名 → 此次计划选中的实例与确切已验成果。",
+      "properties": {
+        "method_id": {
+          "maxLength": 48,
+          "minLength": 1,
+          "title": "Method Id",
+          "type": "string"
+        },
+        "instance_id": {
+          "maxLength": 48,
+          "minLength": 1,
+          "title": "Instance Id",
+          "type": "string"
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AcceptedOutputRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "artifact": {
+          "default": null,
+          "title": "Artifact"
+        },
+        "artifact_omitted_bytes": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Artifact Omitted Bytes"
+        },
+        "deliverable": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Deliverable"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "method_id",
+        "instance_id"
+      ],
+      "title": "FinalOutput",
+      "type": "object"
+    },
+    "OutputCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "maxLength": 200,
+          "title": "Label",
+          "type": "string"
+        },
+        "passed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Passed"
+        },
+        "message": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label"
+      ],
+      "title": "OutputCheck",
+      "type": "object"
+    },
+    "StepOutput": {
+      "additionalProperties": false,
+      "description": "一步的最后一次尝试。\n\naccepted 带交回物；rejected 带最后一次交回的内容与原文；没开始的 not_reached。\noutcome 的其余几种（failed、over_budget、cancelled、running）同工作台的\n尝试结局。",
+      "properties": {
+        "step_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Step Id",
+          "type": "string"
+        },
+        "title": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Title",
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "accepted",
+            "rejected",
+            "failed",
+            "over_budget",
+            "cancelled",
+            "running",
+            "not_reached"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "artifact": {
+          "default": null,
+          "title": "Artifact"
+        },
+        "artifact_omitted_bytes": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Artifact Omitted Bytes"
+        },
+        "returned_raw": {
+          "anyOf": [
+            {
+              "maxLength": 20000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Returned Raw"
+        },
+        "checks": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/OutputCheck"
+          },
+          "maxItems": 64,
+          "title": "Checks",
+          "type": "array"
+        },
+        "current": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Current"
+        }
+      },
+      "required": [
+        "step_id",
+        "outcome"
+      ],
+      "title": "StepOutput",
+      "type": "object"
+    },
+    "TestCaseExecution": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "pattern": "^[A-Za-z0-9._-]{1,64}$",
+          "title": "Case Id",
+          "type": "string"
+        },
+        "state": {
+          "maxLength": 32,
+          "title": "State",
+          "type": "string"
+        },
+        "waiting_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Waiting Reason"
+        },
+        "title": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Title",
+          "type": "string"
+        },
+        "activity": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Activity",
+          "type": "string"
+        },
+        "since": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Since"
+        },
+        "last_event_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Event At"
+        },
+        "spent": {
+          "title": "Spent",
+          "type": "string"
+        },
+        "plan": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TestPlanView"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/TestStepActivity"
+          },
+          "maxItems": 200,
+          "title": "Steps",
+          "type": "array"
+        },
+        "outputs": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CaseOutputsV1"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "case_id",
+        "state",
+        "spent",
+        "steps"
+      ],
+      "title": "TestCaseExecution",
+      "type": "object"
+    },
+    "TestPlanView": {
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        },
+        "planning": {
+          "title": "Planning",
+          "type": "boolean"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        }
+      },
+      "required": [
+        "planning"
+      ],
+      "title": "TestPlanView",
+      "type": "object"
+    },
+    "TestStepActivity": {
+      "additionalProperties": false,
+      "properties": {
+        "step_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Step Id",
+          "type": "string"
+        },
+        "index": {
+          "minimum": 1,
+          "title": "Index",
+          "type": "integer"
+        },
+        "title": {
+          "maxLength": 200,
+          "title": "Title",
+          "type": "string"
+        },
+        "status": {
+          "maxLength": 32,
+          "title": "Status",
+          "type": "string"
+        },
+        "selection_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Selection Reason"
+        },
+        "attempts": {
+          "minimum": 0,
+          "title": "Attempts",
+          "type": "integer"
+        },
+        "spent": {
+          "title": "Spent",
+          "type": "string"
+        },
+        "tools": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Tools",
+          "type": "object"
+        },
+        "latest_activity": {
+          "items": {
+            "$ref": "#/$defs/TestToolActivity"
+          },
+          "maxItems": 20,
+          "title": "Latest Activity",
+          "type": "array"
+        }
+      },
+      "required": [
+        "step_id",
+        "index",
+        "title",
+        "status",
+        "attempts",
+        "spent",
+        "tools",
+        "latest_activity"
+      ],
+      "title": "TestStepActivity",
+      "type": "object"
+    },
+    "TestToolActivity": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "At"
+        },
+        "name": {
+          "maxLength": 256,
+          "title": "Name",
+          "type": "string"
+        },
+        "ok": {
+          "title": "Ok",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "ok"
+      ],
+      "title": "TestToolActivity",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "knowbot-test-execution/v1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[A-Za-z0-9._:-]{8,128}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "status": {
+      "maxLength": 32,
+      "title": "Status",
+      "type": "string"
+    },
+    "cases": {
+      "items": {
+        "$ref": "#/$defs/TestCaseExecution"
+      },
+      "maxItems": 100,
+      "title": "Cases",
+      "type": "array"
+    }
+  },
+  "required": [
+    "contract",
+    "run_id",
+    "status",
+    "cases"
+  ],
+  "title": "TestExecutionV1",
+  "type": "object"
+}
