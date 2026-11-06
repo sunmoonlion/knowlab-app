@@ -63,3 +63,18 @@ L4 格式接入（2026-11-02 后续增量，未部署）：`knowbase-user-data-l
 不从来源自动还原/覆盖正文。每版最多30项，重复同版拒绝；旧Idea仍可读取。
 孵化请求seed为既有JSON边界，生成schema字节未变，不改提供方摘要锁。
 前后端须成组发布；老后端拒绝新字段，不能先单独发布网页入口。
+
+## 各版在用情况与退役条件（SDD 0052 第三节，2026-11-06 第一次整理）
+
+只读整理，没有删任何一版。退役条件统一两句：① 本仓代码不再读写这一版；② 线上没有还钉着这一版的进行中数据（工作稿冻结版、测试、交付）。退役顺序：使用方先删锁和读写代码并发版，提供方最后删。
+
+| 契约与版本 | 提供方 | 本仓谁在用 | 现在谁还会出这一版 | 退役条件 | 状态 |
+| --- | --- | --- | --- | --- | --- |
+| `knowbot-manifest/v2` | knowmart | `domain/knowbots/compile.py` 编译固定专家 | 没写规划的工作稿（固定专家） | 固定专家保留期间不退（所有者 11-03） | 在用 |
+| `knowbot-manifest/v3` | knowmart | `compile.py` 编译动态专家 | 写了规划的工作稿 | 现行版 | 在用 |
+| `dynamic-methods/v1` | knowbench | `compile.py`：有规划、没引方法库、没写能力声明 | 同左 | 所有者定新的动态专家一律写能力声明（v3）后，本仓先停出 v1，再按 knowbench 表的第 ② 句查 | 在用，**可退候选** |
+| `dynamic-methods/v2` | knowbench | `compile.py`：引了方法库、没写能力声明 | 同左 | 同上 | 在用，**可退候选** |
+| `dynamic-methods/v3` | knowbench | `compile.py`：写了能力声明；作者侧模型逐字段比对（`tests/test_capability_methods.py`） | 同左 | 现行版 | 在用 |
+| `data-request/v1`、`user-data/v2` | knowbase | 挑数据、测试集 | 现行 | 现行版 | 在用 |
+| `knowfeed-supply-status/v1` | knowfeed | 需求状态接收 | 现行 | 现行版 | 在用 |
+| `knowbot-delivery/v1` | knowmart | 测试通过后交付 | 现行 | 现行版 | 在用 |
