@@ -2,6 +2,10 @@
   "contract": "formal-method",
   "major_version": 1,
   "schemas": {
-    "definition.schema.json": "0387b577ad065f16995c0b14b1302c1e1abba8b1059bc837e2dbd30efac13db7"
+    "definition.schema.json": "0387b577ad065f16995c0b14b1302c1e1abba8b1059bc837e2dbd30efac13db7",
+    "registration-request.schema.json": "d16b03eb855a89d0fd62150d46da4cc186846bfc9b55e692e182864ea4624f7e",
+    "registration-result.schema.json": "a7672a35e9bd9e3563cf1a6b021ebe44895cf7b6fa88c29effaa77b2535c2f3e",
+    "validation-request.schema.json": "e260a7399e5d8b5ade8295e93a4a9fb15c9ac677ee73fa50d267926ba91a1ac2",
+    "validation-result.schema.json": "61dacbb9c66d0f29a05c99f7b7885a1e2885782ddb1b52b147279bb38b9761a0"
   }
 }
