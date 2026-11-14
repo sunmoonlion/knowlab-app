@@ -3,5 +3,5 @@
   "contract": "dynamic-methods",
   "major_version": 2,
   "schema": "contracts/dynamic-methods/v2/catalog.schema.json",
-  "sha256": "2a38a2071a5ca95d51bc5d676c32aa0d4f31dc03dbba1572d3ce21e502871845"
+  "sha256": "f54608b9f2cecfaabcf2b2bf6767a25e70bd95274d79e067bf8af68a6075a490"
 }
