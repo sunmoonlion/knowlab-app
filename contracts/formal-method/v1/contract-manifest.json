@@ -3,9 +3,12 @@
   "major_version": 1,
   "schemas": {
     "definition.schema.json": "0387b577ad065f16995c0b14b1302c1e1abba8b1059bc837e2dbd30efac13db7",
-    "registration-request.schema.json": "d16b03eb855a89d0fd62150d46da4cc186846bfc9b55e692e182864ea4624f7e",
+    "execution-decision.schema.json": "fedd38af9df912400a1431bde573c0cf7736c73d4a645fd22b14a99a3a2e43e1",
+    "execution-request.schema.json": "9ba01bc8ccce6c39bc255c7fe5aebedd67d18db104f8bf9169456bbb73769b30",
+    "execution-result.schema.json": "1ce4f26277d936600e2029c34338bae8c2a625f9b155bd2cddf62276c07b18d5",
+    "registration-request.schema.json": "86a71b5178a6b06ca90bdd4c3d8e6d2d13d73523f4d741fddc11730ee3abf269",
     "registration-result.schema.json": "a7672a35e9bd9e3563cf1a6b021ebe44895cf7b6fa88c29effaa77b2535c2f3e",
     "validation-request.schema.json": "e260a7399e5d8b5ade8295e93a4a9fb15c9ac677ee73fa50d267926ba91a1ac2",
-    "validation-result.schema.json": "61dacbb9c66d0f29a05c99f7b7885a1e2885782ddb1b52b147279bb38b9761a0"
+    "validation-result.schema.json": "ced90db7b2713bb13587122db9c3ea5b731bd7d30a3d2ffa3550245c42edf125"
   }
 }
