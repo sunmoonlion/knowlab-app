@@ -3,5 +3,5 @@
   "contract": "user-data",
   "major_version": 2,
   "schema": "contracts/user-data/v2/user-data.schema.json",
-  "sha256": "c527ce32ded40c836b402d99be34459383ccf6625e3519ab7090e7651ddd9c8e"
+  "sha256": "e7b51c19b536d3f4557e46a2db8724d477edf16a398d988b9d8b3a5b9b9b04dd"
 }
