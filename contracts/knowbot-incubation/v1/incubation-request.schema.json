@@ -573,6 +573,36 @@
       "title": "CheckCell",
       "type": "object"
     },
+    "CollaborationStep": {
+      "additionalProperties": false,
+      "properties": {
+        "isolation_group": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Isolation Group"
+        },
+        "handoff_from": {
+          "default": [],
+          "items": {
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$",
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Handoff From",
+          "type": "array"
+        }
+      },
+      "title": "CollaborationStep",
+      "type": "object"
+    },
     "ConditionalCheckCell": {
       "additionalProperties": false,
       "properties": {
@@ -2622,6 +2652,25 @@
     "WorkdraftBody": {
       "additionalProperties": false,
       "properties": {
+        "collaboration": {
+          "anyOf": [
+            {
+              "maxProperties": 100,
+              "minProperties": 1,
+              "patternProperties": {
+                "^[A-Za-z][A-Za-z0-9_-]{0,47}$": {
+                  "$ref": "#/$defs/CollaborationStep"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Collaboration"
+        },
         "formal_method": {
           "anyOf": [
             {
