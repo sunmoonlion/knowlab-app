@@ -3,15 +3,15 @@
   "major_version": 1,
   "schemas": {
     "branch-review-request.schema.json": "18cef95483b0f667cbe9fa5037cbef3ef673bc819348a34b747266c3faacdb8a",
-    "definition.schema.json": "a2d2d965423d6e8e69d552249c22c28b97df85ba41d3a803eb04d97fcc9a9e4e",
+    "definition.schema.json": "b4cc4228f64cb251f896b4cc7d7f9ece56b1cdff9c3c3acc43a9210b0b284ead",
     "execution-decision.schema.json": "fedd38af9df912400a1431bde573c0cf7736c73d4a645fd22b14a99a3a2e43e1",
-    "execution-request.schema.json": "1ca8b62ecf5ab9f9bbbd56dfa9a0fa842609993479cf4679ba6b71269baae55c",
+    "execution-request.schema.json": "45278f55111b9ff63abcb278c9a8ba17fe331e1ae8f58c78abc16efdad3e5bf7",
     "execution-result.schema.json": "1961eb7ccbcf1661c740194f55094f117205285fbe409d902aae18d973b5f421",
     "partial-delivery-request.schema.json": "7ce6bc0b9a6aa1d94c12ec6a4e8fe00de7c3e3ddca3768e39c7ef2efd344441f",
     "partial-delivery-result.schema.json": "96d6659e25bb7520a9cb23978a5201851a667f944e7945b2419a534e8c430fdf",
-    "registration-request.schema.json": "716d8a0c114ee3dc143bb6b9a4cee1b605e431e6a992fc73eba98191f6247a57",
+    "registration-request.schema.json": "558f4e697b29bc806dcc69ba98327dca894d1cb174a8271b33f9647f7047b02e",
     "registration-result.schema.json": "a7672a35e9bd9e3563cf1a6b021ebe44895cf7b6fa88c29effaa77b2535c2f3e",
-    "validation-request.schema.json": "a7c57b4697c1951f7962d8cd37f6e2f04eeec7ffd846e6c0b29a766cec3fe57b",
+    "validation-request.schema.json": "d941dd2daa2ed38752b57e311da9838e56f8e0ec986e87651644fc37b766d691",
     "validation-result.schema.json": "26dfaa002d63211ad42811f3ff06de7955713bc58f6702a46e884a2ad3519978"
   }
 }
