@@ -1058,6 +1058,7 @@
           "enum": [
             "platform",
             "mcp",
+            "a2a",
             "skill_instruction",
             "skill_script",
             "service_function",
@@ -1133,6 +1134,7 @@
           "enum": [
             "platform",
             "mcp",
+            "a2a",
             "skill_instruction",
             "skill_script",
             "service_function",
@@ -1674,6 +1676,54 @@
         "on_failure"
       ],
       "title": "MethodStep",
+      "type": "object"
+    },
+    "MethodTemplate": {
+      "additionalProperties": false,
+      "description": "Confirmed bindings of a versioned, fixed authoring template.",
+      "properties": {
+        "template": {
+          "const": "checked_delivery/v1",
+          "title": "Template",
+          "type": "string"
+        },
+        "goal": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Goal",
+          "type": "string"
+        },
+        "deliverable": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Deliverable",
+          "type": "string"
+        },
+        "check": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Check",
+          "type": "string"
+        },
+        "evidence": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "template",
+        "goal",
+        "deliverable",
+        "check",
+        "evidence"
+      ],
+      "title": "MethodTemplate",
       "type": "object"
     },
     "MethodToolBinding": {
@@ -2913,6 +2963,17 @@
     "WorkdraftBody": {
       "additionalProperties": false,
       "properties": {
+        "method_template": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MethodTemplate"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "collaboration": {
           "anyOf": [
             {
