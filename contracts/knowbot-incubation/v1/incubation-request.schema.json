@@ -1191,6 +1191,69 @@
       "title": "ImplementationRef",
       "type": "object"
     },
+    "InstructionPin": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Asset Id"
+        },
+        "asset_revision": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Asset Revision"
+        },
+        "kind": {
+          "enum": [
+            "registered_instruction",
+            "skill_instruction"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "entry": {
+          "title": "Entry",
+          "type": "string"
+        },
+        "digest": {
+          "title": "Digest",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "source",
+        "entry",
+        "digest",
+        "version"
+      ],
+      "title": "InstructionPin",
+      "type": "object"
+    },
     "LatestTest": {
       "additionalProperties": false,
       "description": "最近一次有结论的测试的报告（专家孵化方案第 8.4 节「带上测试报告让 AI 改」，0029\n第三节第 5 步）：第几次、测的是准专家第几版、通过没有、每条用例每一步的结果。只有\n报告：成稿、各步交回物、测试数据都不给（0029 第 6.4 节，模型不看数据的内容）。",
@@ -2479,6 +2542,300 @@
       "title": "Seed",
       "type": "object"
     },
+    "Selection": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "ready",
+            "clarify",
+            "gap"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 1500,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Reason",
+          "type": "string"
+        },
+        "patterns": {
+          "items": {
+            "enum": [
+              "P1",
+              "P2",
+              "P3",
+              "P4",
+              "P5"
+            ],
+            "type": "string"
+          },
+          "maxItems": 5,
+          "title": "Patterns",
+          "type": "array"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/SketchStep"
+          },
+          "maxItems": 16,
+          "title": "Steps",
+          "type": "array"
+        },
+        "routing_required": {
+          "title": "Routing Required",
+          "type": "boolean"
+        },
+        "object_batch": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ObjectBatch"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "status",
+        "reason",
+        "patterns",
+        "steps",
+        "routing_required"
+      ],
+      "title": "Selection",
+      "type": "object"
+    },
+    "SelectionCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "isolated_instruction": {
+          "default": false,
+          "title": "Isolated Instruction",
+          "type": "boolean"
+        },
+        "installation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Installation"
+        },
+        "scope": {
+          "enum": [
+            "owned",
+            "shared"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "reference": {
+          "$ref": "#/$defs/MethodRef"
+        },
+        "declaration": {
+          "$ref": "#/$defs/CapabilityDeclaration"
+        },
+        "inputs": {
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,63}$": {
+              "$ref": "#/$defs/ValueSlot"
+            }
+          },
+          "title": "Inputs",
+          "type": "object"
+        },
+        "outputs": {
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,63}$": {
+              "$ref": "#/$defs/ValueSlot"
+            }
+          },
+          "title": "Outputs",
+          "type": "object"
+        }
+      },
+      "required": [
+        "scope",
+        "reference",
+        "declaration",
+        "inputs",
+        "outputs"
+      ],
+      "title": "SelectionCandidate",
+      "type": "object"
+    },
+    "SelectionContext": {
+      "additionalProperties": false,
+      "properties": {
+        "instructions": {
+          "maxProperties": 24,
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,63}$": {
+              "$ref": "#/$defs/InstructionPin"
+            }
+          },
+          "title": "Instructions",
+          "type": "object"
+        },
+        "methods": {
+          "maxProperties": 48,
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,63}$": {
+              "$ref": "#/$defs/SelectionCandidate"
+            }
+          },
+          "title": "Methods",
+          "type": "object"
+        },
+        "patterns": {
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,63}$": {
+              "type": "boolean"
+            }
+          },
+          "title": "Patterns",
+          "type": "object"
+        },
+        "partial": {
+          "title": "Partial",
+          "type": "boolean"
+        },
+        "previous": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Selection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "methods",
+        "patterns",
+        "partial"
+      ],
+      "title": "SelectionContext",
+      "type": "object"
+    },
+    "SketchStep": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "task": {
+          "maxLength": 1500,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Task",
+          "type": "string"
+        },
+        "method": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Method",
+          "type": "string"
+        },
+        "inputs": {
+          "maxProperties": 100,
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,63}$": {
+              "discriminator": {
+                "mapping": {
+                  "caller": "#/$defs/CallerValue",
+                  "literal": "#/$defs/LiteralValue",
+                  "object_item": "#/$defs/ObjectItem",
+                  "object_rows": "#/$defs/ObjectRows",
+                  "resource": "#/$defs/ResourceValue",
+                  "step": "#/$defs/StepValue"
+                },
+                "propertyName": "source"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/CallerValue"
+                },
+                {
+                  "$ref": "#/$defs/StepValue"
+                },
+                {
+                  "$ref": "#/$defs/LiteralValue"
+                },
+                {
+                  "$ref": "#/$defs/ResourceValue"
+                },
+                {
+                  "$ref": "#/$defs/ObjectItem"
+                },
+                {
+                  "$ref": "#/$defs/ObjectRows"
+                }
+              ]
+            }
+          },
+          "title": "Inputs",
+          "type": "object"
+        },
+        "route_input": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Route Input"
+        },
+        "cases": {
+          "maxProperties": 8,
+          "patternProperties": {
+            "\\S": {
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+              "type": "string"
+            }
+          },
+          "propertyNames": {
+            "maxLength": 1500,
+            "minLength": 1
+          },
+          "title": "Cases",
+          "type": "object"
+        },
+        "reviews": {
+          "default": [],
+          "items": {
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "type": "string"
+          },
+          "maxItems": 8,
+          "title": "Reviews",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "task",
+        "method"
+      ],
+      "title": "SketchStep",
+      "type": "object"
+    },
     "SkillDeliveryTerms": {
       "additionalProperties": false,
       "description": "Publishable provenance and verbatim notices from the operator's review.",
@@ -3106,6 +3463,17 @@
   },
   "additionalProperties": false,
   "properties": {
+    "selection_context": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SelectionContext"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
     "contract": {
       "const": "knowbot-incubation/v1",
       "title": "Contract",

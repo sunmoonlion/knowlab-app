@@ -2,6 +2,27 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://contracts.sunmoonai.com/knowlab/knowbot-incubation/v1/incubation-result.schema.json",
   "$defs": {
+    "CallerValue": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "const": "caller",
+          "title": "Source",
+          "type": "string"
+        },
+        "name": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "name"
+      ],
+      "title": "CallerValue",
+      "type": "object"
+    },
     "Cost": {
       "additionalProperties": false,
       "properties": {
@@ -65,6 +86,17 @@
     "Handback": {
       "additionalProperties": false,
       "properties": {
+        "selection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Selection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "sources": {
           "default": [],
           "items": {
@@ -105,6 +137,193 @@
       "title": "Handback",
       "type": "object"
     },
+    "LiteralValue": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "const": "literal",
+          "title": "Source",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value"
+        }
+      },
+      "required": [
+        "source",
+        "value"
+      ],
+      "title": "LiteralValue",
+      "type": "object"
+    },
+    "ObjectBatch": {
+      "additionalProperties": false,
+      "properties": {
+        "max_objects": {
+          "maximum": 99,
+          "minimum": 1,
+          "title": "Max Objects",
+          "type": "integer"
+        },
+        "on_missing": {
+          "enum": [
+            "stop",
+            "request_partial"
+          ],
+          "title": "On Missing",
+          "type": "string"
+        }
+      },
+      "required": [
+        "max_objects",
+        "on_missing"
+      ],
+      "title": "ObjectBatch",
+      "type": "object"
+    },
+    "ObjectItem": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "const": "object_item",
+          "title": "Source",
+          "type": "string"
+        },
+        "name": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "name"
+      ],
+      "title": "ObjectItem",
+      "type": "object"
+    },
+    "ObjectRows": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "const": "object_rows",
+          "title": "Source",
+          "type": "string"
+        },
+        "step": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Step",
+          "type": "string"
+        },
+        "output": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Output",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "step",
+        "output"
+      ],
+      "title": "ObjectRows",
+      "type": "object"
+    },
+    "ResourceValue": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "const": "resource",
+          "title": "Source",
+          "type": "string"
+        },
+        "requirement_id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Requirement Id",
+          "type": "string"
+        },
+        "role": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "requirement_id",
+        "role"
+      ],
+      "title": "ResourceValue",
+      "type": "object"
+    },
+    "Selection": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "ready",
+            "clarify",
+            "gap"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 1500,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Reason",
+          "type": "string"
+        },
+        "patterns": {
+          "items": {
+            "enum": [
+              "P1",
+              "P2",
+              "P3",
+              "P4",
+              "P5"
+            ],
+            "type": "string"
+          },
+          "maxItems": 5,
+          "title": "Patterns",
+          "type": "array"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/SketchStep"
+          },
+          "maxItems": 16,
+          "title": "Steps",
+          "type": "array"
+        },
+        "routing_required": {
+          "title": "Routing Required",
+          "type": "boolean"
+        },
+        "object_batch": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ObjectBatch"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "status",
+        "reason",
+        "patterns",
+        "steps",
+        "routing_required"
+      ],
+      "title": "Selection",
+      "type": "object"
+    },
     "SelfCheck": {
       "additionalProperties": false,
       "description": "自查（第 8.2 节第 4 条）：一条起草时的建议对不上出处或碰到了判断，已经改成\n了这个缺口（turned_into_gap 是缺口编号）；那条建议不再在建议里。",
@@ -125,6 +344,113 @@
         "turned_into_gap"
       ],
       "title": "SelfCheck",
+      "type": "object"
+    },
+    "SketchStep": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "task": {
+          "maxLength": 1500,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Task",
+          "type": "string"
+        },
+        "method": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Method",
+          "type": "string"
+        },
+        "inputs": {
+          "maxProperties": 100,
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,63}$": {
+              "discriminator": {
+                "mapping": {
+                  "caller": "#/$defs/CallerValue",
+                  "literal": "#/$defs/LiteralValue",
+                  "object_item": "#/$defs/ObjectItem",
+                  "object_rows": "#/$defs/ObjectRows",
+                  "resource": "#/$defs/ResourceValue",
+                  "step": "#/$defs/StepValue"
+                },
+                "propertyName": "source"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/CallerValue"
+                },
+                {
+                  "$ref": "#/$defs/StepValue"
+                },
+                {
+                  "$ref": "#/$defs/LiteralValue"
+                },
+                {
+                  "$ref": "#/$defs/ResourceValue"
+                },
+                {
+                  "$ref": "#/$defs/ObjectItem"
+                },
+                {
+                  "$ref": "#/$defs/ObjectRows"
+                }
+              ]
+            }
+          },
+          "title": "Inputs",
+          "type": "object"
+        },
+        "route_input": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Route Input"
+        },
+        "cases": {
+          "maxProperties": 8,
+          "patternProperties": {
+            "\\S": {
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+              "type": "string"
+            }
+          },
+          "propertyNames": {
+            "maxLength": 1500,
+            "minLength": 1
+          },
+          "title": "Cases",
+          "type": "object"
+        },
+        "reviews": {
+          "default": [],
+          "items": {
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "type": "string"
+          },
+          "maxItems": 8,
+          "title": "Reviews",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "task",
+        "method"
+      ],
+      "title": "SketchStep",
       "type": "object"
     },
     "SourceEntry": {
@@ -178,6 +504,33 @@
         "kind"
       ],
       "title": "SourceEntry",
+      "type": "object"
+    },
+    "StepValue": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "const": "step",
+          "title": "Source",
+          "type": "string"
+        },
+        "step": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Step",
+          "type": "string"
+        },
+        "output": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Output",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "step",
+        "output"
+      ],
+      "title": "StepValue",
       "type": "object"
     },
     "Suggestion": {
