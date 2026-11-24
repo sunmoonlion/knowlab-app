@@ -2,7 +2,7 @@
   "contract": "knowbot-incubation",
   "major_version": 1,
   "schemas": {
-    "incubation-request.schema.json": "0c9821a8299f87379b685c7decae7ead9e576d4190c105d455d36ff2267e29d1",
-    "incubation-result.schema.json": "c733c3122651bdabfd2b49d238a74c8bd3fb3e8e6de5d881bbeb5fc193750e2f"
+    "incubation-request.schema.json": "3424e5ded9535f181b753912dbba442b515fa408052fd32d73d1e554d7c8cea6",
+    "incubation-result.schema.json": "86041c2f4fe2ad88442bdb764b4abe163dee5d94758d125788adbb4e99e5428e"
   }
 }

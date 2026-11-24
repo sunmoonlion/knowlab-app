@@ -1819,6 +1819,42 @@
       "title": "MethodToolBinding",
       "type": "object"
     },
+    "NodeEdit": {
+      "additionalProperties": false,
+      "properties": {
+        "node": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Node",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "revise",
+            "split",
+            "method"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "method": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MethodRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "node",
+        "mode"
+      ],
+      "title": "NodeEdit",
+      "type": "object"
+    },
     "ObjectBatch": {
       "additionalProperties": false,
       "properties": {
@@ -2273,6 +2309,142 @@
       "title": "PlanningCell",
       "type": "object"
     },
+    "PlanningNode": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent"
+        },
+        "goal": {
+          "maxLength": 60000,
+          "minLength": 1,
+          "title": "Goal",
+          "type": "string"
+        },
+        "status": {
+          "default": "pending",
+          "enum": [
+            "pending",
+            "hit",
+            "split",
+            "gap",
+            "clarify"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "reason": {
+          "default": "",
+          "maxLength": 1500,
+          "title": "Reason",
+          "type": "string"
+        },
+        "operator": {
+          "anyOf": [
+            {
+              "enum": [
+                "leaf",
+                "sequence",
+                "parallel_join",
+                "branch",
+                "bounded_loop"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Operator"
+        },
+        "step": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SketchStep"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "batch": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ObjectBatch"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "backtracks": {
+          "default": 0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Backtracks",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "goal"
+      ],
+      "title": "PlanningNode",
+      "type": "object"
+    },
+    "PlanningTree": {
+      "additionalProperties": false,
+      "properties": {
+        "catalog_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Catalog Digest",
+          "type": "string"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/PlanningNode"
+          },
+          "maxItems": 16,
+          "minItems": 1,
+          "title": "Nodes",
+          "type": "array"
+        },
+        "pins": {
+          "maxProperties": 72,
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,63}$": {
+              "type": "string"
+            }
+          },
+          "title": "Pins",
+          "type": "object"
+        }
+      },
+      "required": [
+        "catalog_digest",
+        "nodes"
+      ],
+      "title": "PlanningTree",
+      "type": "object"
+    },
     "PromiseCondition": {
       "additionalProperties": false,
       "properties": {
@@ -2588,6 +2760,17 @@
           "title": "Routing Required",
           "type": "boolean"
         },
+        "tree": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PlanningTree"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "object_batch": {
           "anyOf": [
             {
@@ -2676,6 +2859,17 @@
     "SelectionContext": {
       "additionalProperties": false,
       "properties": {
+        "edit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NodeEdit"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "instructions": {
           "maxProperties": 24,
           "patternProperties": {
