@@ -411,21 +411,6 @@
           "title": "Reason",
           "type": "string"
         },
-        "patterns": {
-          "items": {
-            "enum": [
-              "P1",
-              "P2",
-              "P3",
-              "P4",
-              "P5"
-            ],
-            "type": "string"
-          },
-          "maxItems": 5,
-          "title": "Patterns",
-          "type": "array"
-        },
         "steps": {
           "items": {
             "$ref": "#/$defs/SketchStep"
@@ -464,7 +449,6 @@
       "required": [
         "status",
         "reason",
-        "patterns",
         "steps",
         "routing_required"
       ],
@@ -551,6 +535,17 @@
             }
           },
           "title": "Inputs",
+          "type": "object"
+        },
+        "deliver_as": {
+          "maxProperties": 100,
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,63}$": {
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+              "type": "string"
+            }
+          },
+          "title": "Deliver As",
           "type": "object"
         },
         "route_input": {
