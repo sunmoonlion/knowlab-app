@@ -14,6 +14,28 @@
           "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
           "title": "Name",
           "type": "string"
+        },
+        "lens": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProjectionLens"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "caller_slot": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ValueSlot"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "required": [
@@ -21,6 +43,32 @@
         "name"
       ],
       "title": "CallerValue",
+      "type": "object"
+    },
+    "CollectPack": {
+      "additionalProperties": false,
+      "description": "Pack homogeneous or subtype-compatible predecessor outputs into a typed array.",
+      "properties": {
+        "source": {
+          "const": "collect_pack",
+          "title": "Source",
+          "type": "string"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/$defs/PackMember"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "required": [
+        "source",
+        "items"
+      ],
+      "title": "CollectPack",
       "type": "object"
     },
     "Cost": {
@@ -229,6 +277,38 @@
       "title": "ObjectRows",
       "type": "object"
     },
+    "PackMember": {
+      "additionalProperties": false,
+      "properties": {
+        "tag": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Tag",
+          "type": "string"
+        },
+        "step": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Step",
+          "type": "string"
+        },
+        "output": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Output",
+          "type": "string"
+        },
+        "allow_skipped": {
+          "default": false,
+          "title": "Allow Skipped",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "tag",
+        "step",
+        "output"
+      ],
+      "title": "PackMember",
+      "type": "object"
+    },
     "PlanningNode": {
       "additionalProperties": false,
       "properties": {
@@ -317,10 +397,19 @@
         },
         "backtracks": {
           "default": 0,
-          "maximum": 1,
+          "maximum": 2,
           "minimum": 0,
           "title": "Backtracks",
           "type": "integer"
+        },
+        "tabu_signatures": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 16,
+          "title": "Tabu Signatures",
+          "type": "array"
         }
       },
       "required": [
@@ -363,6 +452,35 @@
         "nodes"
       ],
       "title": "PlanningTree",
+      "type": "object"
+    },
+    "ProjectionLens": {
+      "additionalProperties": false,
+      "description": "Side-effect-free width projection and field renaming (§2.2 closed value ops).",
+      "properties": {
+        "pick_fields": {
+          "default": [],
+          "items": {
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Pick Fields",
+          "type": "array"
+        },
+        "rename_fields": {
+          "maxProperties": 64,
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,63}$": {
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+              "type": "string"
+            }
+          },
+          "title": "Rename Fields",
+          "type": "object"
+        }
+      },
+      "title": "ProjectionLens",
       "type": "object"
     },
     "ResourceValue": {
@@ -411,21 +529,6 @@
           "title": "Reason",
           "type": "string"
         },
-        "patterns": {
-          "items": {
-            "enum": [
-              "P1",
-              "P2",
-              "P3",
-              "P4",
-              "P5"
-            ],
-            "type": "string"
-          },
-          "maxItems": 5,
-          "title": "Patterns",
-          "type": "array"
-        },
         "steps": {
           "items": {
             "$ref": "#/$defs/SketchStep"
@@ -464,7 +567,6 @@
       "required": [
         "status",
         "reason",
-        "patterns",
         "steps",
         "routing_required"
       ],
@@ -520,6 +622,7 @@
               "discriminator": {
                 "mapping": {
                   "caller": "#/$defs/CallerValue",
+                  "collect_pack": "#/$defs/CollectPack",
                   "literal": "#/$defs/LiteralValue",
                   "object_item": "#/$defs/ObjectItem",
                   "object_rows": "#/$defs/ObjectRows",
@@ -534,6 +637,9 @@
                 },
                 {
                   "$ref": "#/$defs/StepValue"
+                },
+                {
+                  "$ref": "#/$defs/CollectPack"
                 },
                 {
                   "$ref": "#/$defs/LiteralValue"
@@ -590,6 +696,28 @@
           "maxItems": 8,
           "title": "Reviews",
           "type": "array"
+        },
+        "step_batch": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ObjectBatch"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "artifact_guard": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VerifiedArtifactGuard"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "required": [
@@ -670,6 +798,17 @@
           "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
           "title": "Output",
           "type": "string"
+        },
+        "lens": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProjectionLens"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "required": [
@@ -722,6 +861,106 @@
         "reason"
       ],
       "title": "Suggestion",
+      "type": "object"
+    },
+    "ValueSlot": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "maxLength": 20000,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Description",
+          "type": "string"
+        },
+        "schema": {
+          "additionalProperties": true,
+          "title": "Schema",
+          "type": "object"
+        },
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        },
+        "meaning": {
+          "maxProperties": 20,
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,63}$": {
+              "maxLength": 20000,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            }
+          },
+          "title": "Meaning",
+          "type": "object"
+        },
+        "on_missing": {
+          "enum": [
+            "pause",
+            "fail",
+            "omit"
+          ],
+          "title": "On Missing",
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "schema",
+        "required",
+        "meaning",
+        "on_missing"
+      ],
+      "title": "ValueSlot",
+      "type": "object"
+    },
+    "VerifiedArtifactGuard": {
+      "additionalProperties": false,
+      "description": "Deterministic model-free predicate over an accepted predecessor output.",
+      "properties": {
+        "step": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Step",
+          "type": "string"
+        },
+        "output": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "title": "Output",
+          "type": "string"
+        },
+        "pointer": {
+          "default": "",
+          "maxLength": 512,
+          "pattern": "^(?:/(?:[^~/]|~[01])*)*$",
+          "title": "Pointer",
+          "type": "string"
+        },
+        "op": {
+          "enum": [
+            "eq",
+            "ne",
+            "gt",
+            "gte",
+            "lt",
+            "lte",
+            "in_set",
+            "is_present"
+          ],
+          "title": "Op",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "step",
+        "output",
+        "op"
+      ],
+      "title": "VerifiedArtifactGuard",
       "type": "object"
     }
   },
