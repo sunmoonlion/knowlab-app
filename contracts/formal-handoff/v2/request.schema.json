@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.sunmoonai.com/knowlab/formal-handoff/v2/request.schema.json",
+  "$defs": {
+    "MethodRef": {
+      "additionalProperties": false,
+      "properties": {
+        "method_id": {
+          "format": "uuid",
+          "title": "Method Id",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "digest": {
+          "pattern": "^sha256:[a-f0-9]{64}$",
+          "title": "Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "method_id",
+        "version",
+        "digest"
+      ],
+      "title": "MethodRef",
+      "type": "object"
+    },
+    "SuggestedPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "sketch_digest": {
+          "pattern": "^sha256:[a-f0-9]{64}$",
+          "title": "Sketch Digest",
+          "type": "string"
+        },
+        "methods": {
+          "items": {
+            "$ref": "#/$defs/MethodRef"
+          },
+          "maxItems": 8,
+          "minItems": 1,
+          "title": "Methods",
+          "type": "array"
+        },
+        "outputs": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Outputs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "sketch_digest",
+        "methods",
+        "outputs"
+      ],
+      "title": "SuggestedPlan",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Approved problem and interface gap; only the method owner may seed a revision.",
+  "properties": {
+    "owner_subject": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Owner Subject",
+      "type": "string"
+    },
+    "question": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Question",
+      "type": "string"
+    },
+    "key": {
+      "maxLength": 128,
+      "minLength": 8,
+      "title": "Key",
+      "type": "string"
+    },
+    "contract": {
+      "const": "knowlab/formal-handoff/v2",
+      "title": "Contract",
+      "type": "string"
+    },
+    "project_id": {
+      "pattern": "^[0-9a-f-]{36}$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "task_id": {
+      "pattern": "^[0-9a-f-]{36}$",
+      "title": "Task Id",
+      "type": "string"
+    },
+    "suggested_plan": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SuggestedPlan"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "htn_tree": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Htn Tree"
+    },
+    "draft_contract": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Draft Contract"
+    },
+    "reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MethodRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "gap": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Gap",
+      "type": "string"
+    },
+    "review_digest": {
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "title": "Review Digest",
+      "type": "string"
+    }
+  },
+  "required": [
+    "owner_subject",
+    "question",
+    "key",
+    "contract",
+    "project_id",
+    "task_id",
+    "gap",
+    "review_digest"
+  ],
+  "title": "FormalHandoff",
+  "type": "object"
+}

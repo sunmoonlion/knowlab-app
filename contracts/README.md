@@ -53,7 +53,7 @@ L4 格式接入（2026-11-02 后续增量，未部署）：`knowbase-user-data-l
 工作稿/孵化请求可选 execution 与消费锁同步；运行目录沿 dynamic-methods/v3，
 只增加新来源格式，旧目录/旧引用精确重编译不变。无数据库迁移、无第二运行器。
 
-本次方法需求传递另用 runtime-incubation/v2；它是未接受参考，不能直接变成规则。
+工作台提交方法需求使用 `formal-handoff/v2`。工坊把需求作为作者确认前的反馈。
 两种 v3 名称不同：author-method/v3 是作者定义，dynamic-methods/v3 是现有运行目录。
 保存版本不是成熟库准入；多槽字段路径绑定和语义数据要求仍待后续实现。
 

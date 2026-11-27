@@ -3729,6 +3729,38 @@
       "title": "StepValue",
       "type": "object"
     },
+    "StudioBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FormalMethodSource"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "allowed_callers": {
+          "items": {
+            "enum": [
+              "host",
+              "model"
+            ],
+            "type": "string"
+          },
+          "title": "Allowed Callers",
+          "type": "array"
+        }
+      },
+      "required": [
+        "source",
+        "allowed_callers"
+      ],
+      "title": "StudioBinding",
+      "type": "object"
+    },
     "TableFormat": {
       "additionalProperties": false,
       "description": "一张表的格式：表名、列标签、行标签（0030 的表格读取取表头与第一列，不取数）。",
@@ -4089,6 +4121,17 @@
     "WorkdraftBody": {
       "additionalProperties": false,
       "properties": {
+        "studio_binding": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StudioBinding"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "method_template": {
           "anyOf": [
             {
