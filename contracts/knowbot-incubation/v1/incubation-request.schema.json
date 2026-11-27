@@ -2552,6 +2552,17 @@
           "title": "Reason",
           "type": "string"
         },
+        "delivery_goals": {
+          "maxProperties": 15,
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,63}$": {
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+              "type": "string"
+            }
+          },
+          "title": "Delivery Goals",
+          "type": "object"
+        },
         "operator": {
           "anyOf": [
             {
@@ -3342,6 +3353,17 @@
           "title": "Inputs",
           "type": "object"
         },
+        "deliver_as": {
+          "maxProperties": 100,
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_-]{0,63}$": {
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+              "type": "string"
+            }
+          },
+          "title": "Deliver As",
+          "type": "object"
+        },
         "route_input": {
           "anyOf": [
             {
@@ -3758,6 +3780,16 @@
           "pattern": "^[a-z][a-z0-9_]*(?:\\.[a-z0-9_]+){1,5}$",
           "title": "Expected Domain Id",
           "type": "string"
+        },
+        "outputs": {
+          "default": [],
+          "items": {
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Outputs",
+          "type": "array"
         }
       },
       "required": [
