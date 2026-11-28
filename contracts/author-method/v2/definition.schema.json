@@ -222,6 +222,7 @@
       "properties": {
         "template": {
           "enum": [
+            "assertion",
             "required",
             "non_empty",
             "list_min",
@@ -256,6 +257,7 @@
       "properties": {
         "template": {
           "enum": [
+            "assertion",
             "required",
             "non_empty",
             "list_min",
