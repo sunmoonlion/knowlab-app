@@ -413,6 +413,19 @@
       ],
       "default": null
     },
+    "error": {
+      "anyOf": [
+        {
+          "maxLength": 1000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error"
+    },
     "blocked": {
       "anyOf": [
         {
