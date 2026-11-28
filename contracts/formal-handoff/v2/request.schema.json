@@ -93,12 +93,12 @@
       "type": "string"
     },
     "project_id": {
-      "pattern": "^[0-9a-f-]{36}$",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
       "title": "Project Id",
       "type": "string"
     },
     "task_id": {
-      "pattern": "^[0-9a-f-]{36}$",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
       "title": "Task Id",
       "type": "string"
     },
@@ -153,6 +153,7 @@
     "gap": {
       "maxLength": 2000,
       "minLength": 1,
+      "pattern": "\\S",
       "title": "Gap",
       "type": "string"
     },
